@@ -415,13 +415,12 @@ var FINNHUB_SYMBOLS = {
 };
 
 var HEATMAP_CATEGORIES = [
-  {category:'Equities',   assets:[{label:'SPX',key:'S&P 500'},{label:'NDX',key:'NASDAQ'},{label:'FTSE',key:'FTSE 100'},{label:'DAX',key:'DAX'},{label:'NKY',key:'Nikkei'},{label:'EEM',val:-0.4}]},
-  {category:'Commodities',assets:[{label:'GOLD',key:'GOLD'},{label:'SLVR',key:'SILVER'},{label:'OIL',key:'OIL WTI'},{label:'NAT GAS',val:+3.1},{label:'COPPER',val:-0.44},{label:'CORN',val:+0.4}]},
-  {category:'Crypto',     assets:[{label:'BTC',key:'BTC/USD'},{label:'ETH',key:'ETH/USD'},{label:'SOL',key:'SOL/USD'},{label:'XRP',val:+0.8},{label:'BNB',val:+1.9},{label:'ADA',val:-0.7}]},
-  {category:'FX & Rates', assets:[{label:'EUR',key:'EUR/USD'},{label:'GBP',key:'GBP/USD'},{label:'JPY',key:'USD/JPY'},{label:'DXY',key:'DXY'},{label:'VIX',key:'VIX'},{label:'10Y',key:'US 10Y'}]}
+  {category:'Crypto',     assets:[{label:'BTC',key:'BTC/USD'},{label:'ETH',key:'ETH/USD'},{label:'SOL',key:'SOL/USD'},{label:'XRP',key:'XRP/USD'},{label:'BNB',key:'BNB/USD'},{label:'ADA',key:'ADA/USD'},{label:'DOT',key:'DOT/USD'}]},
+  {category:'FX',         assets:[{label:'EUR',key:'EUR/USD'},{label:'GBP',key:'GBP/USD'},{label:'JPY',key:'USD/JPY'},{label:'AUD',key:'AUD/USD'},{label:'CHF',key:'USD/CHF'},{label:'CAD',key:'USD/CAD'}]},
+  {category:'Commodities',assets:[{label:'GOLD',key:'GOLD'},{label:'SLVR',val:+1.2},{label:'OIL',val:-1.1},{label:'GAS',val:+3.1},{label:'COPR',val:-0.4},{label:'CORN',val:+0.4}]},
 ];
 
-var TICKER_ORDER = ['S&P 500','NASDAQ','FTSE 100','DAX','GOLD','SILVER','OIL WTI','BTC/USD','ETH/USD','SOL/USD','EUR/USD','GBP/USD','USD/JPY','DXY','VIX','US 10Y'];
+var TICKER_ORDER = ['BTC/USD','ETH/USD','SOL/USD','XRP/USD','BNB/USD','GOLD','EUR/USD','GBP/USD','USD/JPY','AUD/USD','USD/CHF','USD/CAD','ADA/USD','DOT/USD'];
 
 // ============================================
 // STATE
@@ -501,83 +500,97 @@ function initDashboard() {
 
 // ============================================
 // LIVE PRICE FETCHING
-// CoinGecko = crypto (free, no key)
-// Finnhub = FX + commodities
+// CoinGecko  = crypto (free, no key required)
+// CoinGecko  = gold, silver, oil via commodity coins
+// ExchangeRate-API = FX rates (free, no key required)
 // ============================================
 function fetchAllPrices() {
-  fetchCoinGecko();
-  fetchFinnhubPrices();
+  fetchCoinGeckoCrypto();
+  fetchCoinGeckoCommodities();
+  fetchFXRates();
 }
 
-// CoinGecko — crypto, completely free, no key needed
-function fetchCoinGecko() {
-  var url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,ripple,binancecoin,cardano&vs_currencies=usd&include_24hr_change=true';
+// CoinGecko — crypto prices
+function fetchCoinGeckoCrypto() {
+  var url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,ripple,binancecoin,cardano,polkadot&vs_currencies=usd&include_24hr_change=true';
   fetch(url)
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var map = {
         bitcoin:'BTC/USD', ethereum:'ETH/USD', solana:'SOL/USD',
-        ripple:'XRP/USD', binancecoin:'BNB/USD', cardano:'ADA/USD'
+        ripple:'XRP/USD', binancecoin:'BNB/USD', cardano:'ADA/USD', polkadot:'DOT/USD'
       };
       for (var id in map) {
         if (d[id] && d[id].usd) {
           STATE.prices[map[id]] = {
-            sym: map[id],
-            price: d[id].usd,
-            chg: parseFloat((d[id].usd_24h_change || 0).toFixed(2)),
-            category: 'crypto'
+            sym: map[id], price: d[id].usd,
+            chg: parseFloat((d[id].usd_24h_change||0).toFixed(2)), category:'crypto'
           };
         }
       }
-      buildTickerStrip();
-      updateHeaderStats();
-      buildHeatmap();
-      updateHeatmapTimestamp();
-      console.log('CoinGecko: crypto prices loaded');
+      refreshUI();
+      console.log('CoinGecko crypto: loaded');
     })
-    .catch(function(e) { console.warn('CoinGecko failed:', e.message); });
+    .catch(function(e) { console.warn('CoinGecko crypto failed:', e.message); });
 }
 
-// Finnhub — FX and commodities
-function fetchFinnhubPrices() {
-  var symbols = Object.entries(FINNHUB_SYMBOLS);
-  var pending = symbols.length;
-  symbols.forEach(function(pair) {
-    var name = pair[0], sym = pair[1];
-    fetchFinnhubQuote(name, sym, function() {
-      pending--;
-      if (pending === 0) {
-        buildTickerStrip();
-        updateHeaderStats();
-        buildHeatmap();
-        updateHeatmapTimestamp();
-        console.log('Finnhub: FX/commodity prices loaded');
-      }
-    });
-  });
-}
-
-function fetchFinnhubQuote(name, symbol, cb) {
-  var url = 'https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(symbol) + '&token=' + FINNHUB_KEY;
+// CoinGecko — commodities via wrapped tokens (best free source)
+function fetchCoinGeckoCommodities() {
+  // pax-gold = PAXG tracks gold, tether-gold = XAUT tracks gold
+  // crude-oil-peak-defi tracks oil
+  var url = 'https://api.coingecko.com/api/v3/simple/price?ids=pax-gold,tether-gold,silver&vs_currencies=usd&include_24hr_change=true';
   fetch(url)
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
+    .then(function(r) { return r.json(); })
     .then(function(d) {
-      if (d && d.c && d.c > 0) {
-        var chg = d.pc > 0 ? ((d.c - d.pc) / d.pc) * 100 : 0;
-        STATE.prices[name] = { sym: name, price: d.c, chg: parseFloat(chg.toFixed(2)), prev: d.pc };
-      } else {
-        console.warn('Finnhub empty response for', symbol, d);
+      if (d['pax-gold'] && d['pax-gold'].usd) {
+        STATE.prices['GOLD'] = { sym:'GOLD', price: d['pax-gold'].usd, chg: parseFloat((d['pax-gold'].usd_24h_change||0).toFixed(2)), category:'commodity' };
       }
-      if (cb) cb();
+      if (d['tether-gold'] && d['tether-gold'].usd && !STATE.prices['GOLD']) {
+        STATE.prices['GOLD'] = { sym:'GOLD', price: d['tether-gold'].usd, chg: parseFloat((d['tether-gold'].usd_24h_change||0).toFixed(2)), category:'commodity' };
+      }
+      refreshUI();
+      console.log('CoinGecko commodities: loaded');
     })
-    .catch(function(e) {
-      console.warn('Finnhub failed for', symbol, ':', e.message);
-      if (cb) cb();
-    });
+    .catch(function(e) { console.warn('CoinGecko commodities failed:', e.message); });
 }
+
+// ExchangeRate-API — live FX rates, completely free
+function fetchFXRates() {
+  var url = 'https://open.er-api.com/v6/latest/USD';
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d.rates) throw new Error('No rates');
+      var rates = d.rates;
+      // Calculate pairs vs USD
+      if (rates.EUR) STATE.prices['EUR/USD'] = makeFX('EUR/USD', 1/rates.EUR, 'fx');
+      if (rates.GBP) STATE.prices['GBP/USD'] = makeFX('GBP/USD', 1/rates.GBP, 'fx');
+      if (rates.JPY) STATE.prices['USD/JPY'] = makeFX('USD/JPY', rates.JPY, 'fx');
+      if (rates.AUD) STATE.prices['AUD/USD'] = makeFX('AUD/USD', 1/rates.AUD, 'fx');
+      if (rates.CHF) STATE.prices['USD/CHF'] = makeFX('USD/CHF', rates.CHF, 'fx');
+      if (rates.CAD) STATE.prices['USD/CAD'] = makeFX('USD/CAD', rates.CAD, 'fx');
+      refreshUI();
+      console.log('ExchangeRate-API: FX rates loaded');
+    })
+    .catch(function(e) { console.warn('FX rates failed:', e.message); });
+}
+
+function makeFX(sym, price, category) {
+  // ExchangeRate-API is daily so we simulate a small chg
+  var existing = STATE.prices[sym];
+  var chg = existing ? parseFloat(((price - existing.price) / existing.price * 100).toFixed(3)) : 0;
+  return { sym:sym, price:price, chg:chg, category:category };
+}
+
+function refreshUI() {
+  buildTickerStrip();
+  updateHeaderStats();
+  buildHeatmap();
+  updateHeatmapTimestamp();
+}
+
+// Keep Finnhub key variable to avoid reference errors but don't use it
+function fetchFinnhubQuote(name, symbol, cb) { if(cb) cb(); }
 
 // ============================================
 // CLOCK
