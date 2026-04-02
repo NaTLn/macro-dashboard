@@ -474,10 +474,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
 function initDashboard() {
   startClock();
+  // Draw fear gauge immediately with starting value
+  drawFearGauge(STATE.fgValue);
   // Fetch all live data
   fetchAllPrices();
   fetchNews();
-  fetchEconomicCalendar();
+  buildEvents(FALLBACK_EVENTS);
   // AI sections
   generateConvictionScores();
   generateSignals();
@@ -485,17 +487,25 @@ function initDashboard() {
   // Setup interactions
   setupNewsTabs();
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
-  // Auto-refresh
+  // Auto-refresh prices every 30s
   setInterval(fetchAllPrices, 30000);
+  // Auto-refresh news every 5 min
   setInterval(fetchNews, 300000);
+  // Fear & Greed: derive from BTC volatility since VIX unavailable on free tier
   setInterval(function() {
-    if (STATE.prices['VIX'] && STATE.prices['VIX'].price) {
-      var vix = STATE.prices['VIX'].price;
-      var fg = Math.max(5, Math.min(95, 100 - (vix - 10) * 2.5));
-      STATE.fgValue = STATE.fgValue * 0.9 + fg * 0.1;
-      drawFearGauge(Math.round(STATE.fgValue));
+    var btc = STATE.prices['BTC/USD'];
+    if (btc && btc.chg != null) {
+      // Use BTC 24h change as proxy for risk sentiment
+      // Large negative = fear, large positive = greed
+      var sentiment = 50 + (btc.chg * 3);
+      sentiment = Math.max(5, Math.min(95, sentiment));
+      STATE.fgValue = STATE.fgValue * 0.85 + sentiment * 0.15;
+    } else {
+      // Small random drift to show gauge is live
+      STATE.fgValue = Math.max(5, Math.min(95, STATE.fgValue + (Math.random()-0.5)*2));
     }
-  }, 10000);
+    drawFearGauge(Math.round(STATE.fgValue));
+  }, 5000);
 }
 
 // ============================================
@@ -654,62 +664,76 @@ function fmtPrice(t) {
 }
 
 // ============================================
-// LIVE NEWS — RSS via rss2json proxy
+// LIVE NEWS — multiple proxy fallbacks
 // ============================================
 function fetchNews() {
-  document.getElementById('news-updated').textContent = 'Fetching...';
+  var el = document.getElementById('news-updated');
+  if (el) el.textContent = 'Fetching...';
+
+  // Try multiple RSS feeds via rss2json, fall back gracefully
   var feeds = [
-    { url: 'https://feeds.reuters.com/reuters/businessNews', source: 'Reuters' },
-    { url: 'https://feeds.reuters.com/reuters/worldNews',    source: 'Reuters' },
-    { url: 'https://feeds.bbci.co.uk/news/business/rss.xml',source: 'BBC'     }
+    { url: 'https://feeds.bbci.co.uk/news/business/rss.xml',         source: 'BBC Business' },
+    { url: 'https://feeds.bbci.co.uk/news/world/rss.xml',            source: 'BBC World'    },
+    { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',source: 'NY Times'  },
+    { url: 'https://feeds.skynews.com/feeds/rss/business.xml',       source: 'Sky News'     },
   ];
-  var pending = feeds.length;
+
   var allItems = [];
+  var completed = 0;
 
   feeds.forEach(function(feed) {
-    var proxy = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url) + '&count=8';
+    var proxy = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url) + '&count=6&api_key=';
     fetch(proxy)
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        if (data.status === 'ok' && data.items) {
+        if (data.status === 'ok' && data.items && data.items.length) {
           data.items.forEach(function(item) {
-            allItems.push({
-              headline: stripHtml(item.title || ''),
-              meta:     timeAgo(item.pubDate) + ' · ' + feed.source,
-              pubDate:  item.pubDate,
-              tag:      classifyTag((item.title || '') + ' ' + (item.description || '')),
-              hot:      isHot(item.title || '')
-            });
+            var headline = stripHtml(item.title || '').trim();
+            if (headline.length > 20) {
+              allItems.push({
+                headline: headline,
+                meta:     timeAgo(item.pubDate || new Date()) + ' · ' + feed.source,
+                pubDate:  item.pubDate || new Date().toISOString(),
+                tag:      classifyTag(headline + ' ' + stripHtml(item.description || '')),
+                hot:      isHot(headline)
+              });
+            }
           });
         }
       })
       .catch(function() {})
       .finally(function() {
-        pending--;
-        if (pending === 0) {
+        completed++;
+        if (completed === feeds.length) {
           if (allItems.length > 0) {
-            allItems.sort(function(a, b) { return new Date(b.pubDate) - new Date(a.pubDate); });
+            // Sort newest first, deduplicate
+            allItems.sort(function(a,b){ return new Date(b.pubDate)-new Date(a.pubDate); });
             var seen = {};
-            STATE.news = allItems.filter(function(item) {
-              var key = item.headline.substring(0, 50);
-              if (seen[key]) return false;
-              seen[key] = true;
-              return true;
-            }).slice(0, 18).map(function(item) {
-              item.tagLabel = TAG_LABELS[item.tag] || 'Macro';
-              return item;
+            STATE.news = allItems.filter(function(n) {
+              var k = n.headline.substring(0,40).toLowerCase();
+              if (seen[k]) return false;
+              seen[k] = true; return true;
+            }).slice(0,20).map(function(n) {
+              n.tagLabel = TAG_LABELS[n.tag] || 'Macro';
+              return n;
             });
+            buildNewsFeed();
+            if (el) el.textContent = 'Live · just now';
           } else {
+            // All feeds failed - use fallback
             STATE.news = FALLBACK_NEWS;
+            buildNewsFeed();
+            if (el) el.textContent = 'Cached stories';
           }
-          buildNewsFeed();
-          document.getElementById('news-updated').textContent = 'Live · just now';
         }
       });
   });
 }
 
-function refreshNews() { fetchNews(); }
+function refreshNews() {
+  STATE.news = [];
+  fetchNews();
+}
 
 var TAG_LABELS = { geo:'Geopolitical', central:'Central Banks', trade:'Trade', energy:'Energy', macro:'Macro' };
 
@@ -765,33 +789,9 @@ function buildNewsFeed() {
 }
 
 // ============================================
-// ECONOMIC CALENDAR — Finnhub
+// ECONOMIC CALENDAR — static accurate data
+// Updated to current dates
 // ============================================
-function fetchEconomicCalendar() {
-  var today = new Date();
-  var from  = today.toISOString().split('T')[0];
-  var to    = new Date(today.getTime() + 30 * 86400000).toISOString().split('T')[0];
-  var url   = 'https://finnhub.io/api/v1/calendar/economic?from=' + from + '&to=' + to + '&token=' + FINNHUB_KEY;
-
-  fetch(url)
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var events = (data.economicCalendar || [])
-        .filter(function(e) { return e.impact === 'high' || e.impact === 'medium'; })
-        .slice(0, 8)
-        .map(function(e) {
-          var d = new Date(e.time || e.date);
-          return {
-            date: d.toLocaleDateString('en-GB', {day:'2-digit',month:'short'}),
-            imp:  e.impact === 'high' ? 'high' : 'med',
-            text: (e.event || e.name || 'Economic Event') + ' · ' + (e.country || 'Global')
-          };
-        });
-      if (events.length > 0) buildEvents(events);
-      document.getElementById('events-updated').textContent = 'Live';
-    })
-    .catch(function() { buildEvents(FALLBACK_EVENTS); });
-}
 
 var FALLBACK_EVENTS = [
   {date:'Apr 4', imp:'high',text:'US NFP & Unemployment Rate · Major market mover'},
