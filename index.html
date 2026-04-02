@@ -397,27 +397,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 // ============================================
 // CONFIGURATION — ADD YOUR KEYS HERE
 // ============================================
-    var FINNHUB_KEY = 'd7716fpr01qtg3nf8ikgd7716fpr01qtg3nf8il0';
-  
+var FINNHUB_KEY    = 'd7716fpr01qtg3nf8ikgd7716fpr01qtg3nf8il0';
+var ANTHROPIC_KEY  = '';
+
 // ============================================
 // FINNHUB SYMBOLS MAP
 // ============================================
 var FINNHUB_SYMBOLS = {
-  'S&P 500':  '^GSPC',
-  'NASDAQ':   '^IXIC',
-  'FTSE 100': '^FTSE',
-  'DAX':      '^GDAXI',
-  'Nikkei':   '^N225',
   'GOLD':     'OANDA:XAU_USD',
   'SILVER':   'OANDA:XAG_USD',
   'OIL WTI':  'OANDA:BCO_USD',
   'EUR/USD':  'OANDA:EUR_USD',
   'GBP/USD':  'OANDA:GBP_USD',
   'USD/JPY':  'OANDA:USD_JPY',
-  'DXY':      'OANDA:USD_DXY',
-  'BTC/USD':  'BINANCE:BTCUSDT',
-  'ETH/USD':  'BINANCE:ETHUSDT',
-  'SOL/USD':  'BINANCE:SOLUSDT',
+  'AUD/USD':  'OANDA:AUD_USD',
+  'USD/CAD':  'OANDA:USD_CAD',
 };
 
 var HEATMAP_CATEGORIES = [
@@ -455,16 +449,20 @@ window.addEventListener('DOMContentLoaded', function() {
     [100, 'Ready.']
   ];
   var i = 0;
+  function showApp() {
+    document.getElementById('loading-screen').classList.add('fade-out');
+    setTimeout(function() {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      initDashboard();
+    }, 400);
+  }
+  // Safety net — always shows app after 4 seconds no matter what
+  var safetyTimer = setTimeout(showApp, 4000);
   function nextStep() {
     if (i >= steps.length) {
-      setTimeout(function() {
-        document.getElementById('loading-screen').classList.add('fade-out');
-        setTimeout(function() {
-          document.getElementById('loading-screen').style.display = 'none';
-          document.getElementById('app').style.display = 'block';
-          initDashboard();
-        }, 400);
-      }, 200);
+      clearTimeout(safetyTimer);
+      setTimeout(showApp, 200);
       return;
     }
     bar.style.width = steps[i][0] + '%';
@@ -502,38 +500,58 @@ function initDashboard() {
 }
 
 // ============================================
-// FINNHUB PRICE FETCHING
+// LIVE PRICE FETCHING
+// CoinGecko = crypto (free, no key)
+// Finnhub = FX + commodities
 // ============================================
 function fetchAllPrices() {
-  var symbols = Object.entries(FINNHUB_SYMBOLS);
-  var pending = symbols.length;
-  var updated = 0;
+  fetchCoinGecko();
+  fetchFinnhubPrices();
+}
 
-  // Also fetch VIX and US10Y separately
-  fetchFinnhubQuote('VIX', '^VIX', function() {
-    fetchFinnhubQuote('US 10Y', '^TNX', function() {
+// CoinGecko — crypto, completely free, no key needed
+function fetchCoinGecko() {
+  var url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,ripple,binancecoin,cardano&vs_currencies=usd&include_24hr_change=true';
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var map = {
+        bitcoin:'BTC/USD', ethereum:'ETH/USD', solana:'SOL/USD',
+        ripple:'XRP/USD', binancecoin:'BNB/USD', cardano:'ADA/USD'
+      };
+      for (var id in map) {
+        if (d[id] && d[id].usd) {
+          STATE.prices[map[id]] = {
+            sym: map[id],
+            price: d[id].usd,
+            chg: parseFloat((d[id].usd_24h_change || 0).toFixed(2)),
+            category: 'crypto'
+          };
+        }
+      }
+      buildTickerStrip();
       updateHeaderStats();
       buildHeatmap();
       updateHeatmapTimestamp();
-    });
-  });
+      console.log('CoinGecko: crypto prices loaded');
+    })
+    .catch(function(e) { console.warn('CoinGecko failed:', e.message); });
+}
 
+// Finnhub — FX and commodities
+function fetchFinnhubPrices() {
+  var symbols = Object.entries(FINNHUB_SYMBOLS);
+  var pending = symbols.length;
   symbols.forEach(function(pair) {
     var name = pair[0], sym = pair[1];
     fetchFinnhubQuote(name, sym, function() {
-      updated++;
       pending--;
       if (pending === 0) {
         buildTickerStrip();
         updateHeaderStats();
         buildHeatmap();
         updateHeatmapTimestamp();
-        // Update FG from VIX
-        if (STATE.prices['VIX'] && STATE.prices['VIX'].price) {
-          var vix = STATE.prices['VIX'].price;
-          STATE.fgValue = Math.max(5, Math.min(95, 100 - (vix - 10) * 2.5));
-          drawFearGauge(Math.round(STATE.fgValue));
-        }
+        console.log('Finnhub: FX/commodity prices loaded');
       }
     });
   });
@@ -542,15 +560,23 @@ function fetchAllPrices() {
 function fetchFinnhubQuote(name, symbol, cb) {
   var url = 'https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(symbol) + '&token=' + FINNHUB_KEY;
   fetch(url)
-    .then(function(r) { return r.json(); })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(function(d) {
       if (d && d.c && d.c > 0) {
         var chg = d.pc > 0 ? ((d.c - d.pc) / d.pc) * 100 : 0;
         STATE.prices[name] = { sym: name, price: d.c, chg: parseFloat(chg.toFixed(2)), prev: d.pc };
+      } else {
+        console.warn('Finnhub empty response for', symbol, d);
       }
       if (cb) cb();
     })
-    .catch(function() { if (cb) cb(); });
+    .catch(function(e) {
+      console.warn('Finnhub failed for', symbol, ':', e.message);
+      if (cb) cb();
+    });
 }
 
 // ============================================
@@ -1016,26 +1042,22 @@ function buildRegime(regime, cycles, pills) {
 // CLAUDE API CALL (direct browser)
 // ============================================
 async function callClaude(prompt, maxTokens) {
-  if (!ANTHROPIC_KEY || ANTHROPIC_KEY === 'YOUR_ANTHROPIC_KEY_HERE') {
-    throw new Error('Anthropic key not configured');
-  }
-  var r = await fetch('https://api.anthropic.com/v1/messages', {
+  var r = await fetch('/api/analyse', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: maxTokens || 1500,
-      messages: [{ role: 'user', content: prompt }]
+      prompt: prompt,
+      context: buildPriceContext(),
+      max_tokens: maxTokens || 1500
     })
   });
-  if (!r.ok) throw new Error('Claude API error ' + r.status);
+  if (!r.ok) {
+    var err = await r.json().catch(function() { return { error: 'HTTP ' + r.status }; });
+    throw new Error(err.error || 'HTTP ' + r.status);
+  }
   var data = await r.json();
-  return data.content && data.content[0] && data.content[0].text || '';
+  if (data.error) throw new Error(data.error);
+  return data.text || '';
 }
 
 function buildPriceContext() {
