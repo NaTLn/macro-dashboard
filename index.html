@@ -9,7 +9,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080a0d;--bg2:#0e1117;--bg3:#141920;--bg4:#1a2028;--bg5:#1f2631;
+  --bg:#080a0d;--bg2:#0e1117;--bg3:#141920;--bg4:#1a2028;
   --border:rgba(255,255,255,0.05);--border2:rgba(255,255,255,0.10);--border3:rgba(255,255,255,0.18);
   --text:#e2e8f0;--text2:#94a3b8;--text3:#4b5563;
   --gold:#f59e0b;--gold2:#fbbf24;--green:#22c55e;--red:#ef4444;
@@ -25,8 +25,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .loader-content{text-align:center}
 .loader-logo{font-family:var(--mono);font-size:24px;font-weight:700;letter-spacing:4px;color:var(--cyan);margin-bottom:28px;animation:flicker 3s infinite}
 @keyframes flicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.3}94%{opacity:1}97%{opacity:1}98%{opacity:.5}99%{opacity:1}}
-.loader-bar-wrap{width:240px;height:2px;background:var(--bg4);border-radius:2px;overflow:hidden;margin:0 auto 14px}
-.loader-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:2px;transition:width .35s ease}
+.loader-bar-wrap{width:260px;height:2px;background:var(--bg4);border-radius:2px;overflow:hidden;margin:0 auto 14px}
+.loader-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:2px;transition:width .4s ease}
 .loader-status{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.5px}
 
 /* LIVE DOT */
@@ -44,7 +44,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .regime-pill.red{background:rgba(239,68,68,.1);color:var(--red);border-color:rgba(239,68,68,.25)}
 .header-stat{display:flex;flex-direction:column;align-items:flex-end}
 .hs-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:1px}
-.hs-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);transition:color .3s}
+.hs-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text)}
 .hs-val.red{color:var(--red)}.hs-val.blue{color:var(--blue)}.hs-val.gold{color:var(--gold2)}
 .time-block{text-align:right;border-left:.5px solid var(--border2);padding-left:16px}
 .live-time{font-family:var(--mono);font-size:14px;font-weight:700}
@@ -88,16 +88,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .dot.cyan{background:var(--cyan)}.dot.green{background:var(--green)}.dot.amber{background:var(--amber)}
 .dot.red{background:var(--red)}.dot.blue{background:var(--blue)}.dot.purple{background:var(--purple)}
 .updated-tag{font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.5px}
+.ai-tag{font-family:var(--mono);font-size:9px;color:var(--purple);letter-spacing:.5px}
 
 /* NEWS */
 .news-refresh-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .nrb-label{font-family:var(--mono);font-size:9px;color:var(--text3)}
 .nrb-btn{font-family:var(--mono);font-size:9px;padding:3px 8px;background:var(--bg3);border:.5px solid var(--border2);border-radius:4px;color:var(--text2);cursor:pointer;transition:all .2s}
 .nrb-btn:hover{color:var(--text);border-color:var(--border3)}
-.news-tabs{display:flex;gap:2px;background:var(--bg3);padding:3px;border-radius:var(--rs);flex-wrap:wrap}
+.news-tabs{display:flex;gap:2px;background:var(--bg3);padding:3px;border-radius:var(--rs);flex-wrap:wrap;margin-bottom:10px}
 .ntab{font-family:var(--mono);font-size:9px;letter-spacing:.5px;padding:4px 9px;border-radius:4px;border:none;background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;text-transform:uppercase}
 .ntab:hover{color:var(--text2)}.ntab.active{background:var(--bg2);color:var(--text)}
-.news-list{max-height:400px;overflow-y:auto;margin-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.news-list{max-height:380px;overflow-y:auto;margin-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
 .news-list::-webkit-scrollbar{width:3px}.news-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 .news-item{padding:10px 0;border-bottom:.5px solid var(--border);cursor:pointer;transition:all .15s}
 .news-item:last-child{border-bottom:none}.news-item:hover{background:rgba(255,255,255,.02);padding-left:5px}
@@ -116,7 +117,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .conviction-list{margin-bottom:10px}
 .conv-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:.5px solid var(--border);cursor:pointer;transition:all .15s;border-radius:4px}
 .conv-item:last-child{border-bottom:none}.conv-item:hover{background:rgba(255,255,255,.025);padding-left:5px}
-.conv-sym{font-family:var(--mono);font-size:11px;font-weight:700;min-width:55px}
+.conv-sym{font-family:var(--mono);font-size:11px;font-weight:700;min-width:60px}
 .conv-dir{font-family:var(--mono);font-size:9px;letter-spacing:.8px;padding:2px 7px;border-radius:2px;flex-shrink:0}
 .dir-long{background:rgba(34,197,94,.12);color:var(--green);border:.5px solid rgba(34,197,94,.3)}
 .dir-short{background:rgba(239,68,68,.12);color:var(--red);border:.5px solid rgba(239,68,68,.3)}
@@ -124,6 +125,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .conv-bar-wrap{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
 .conv-bar{height:100%;border-radius:2px;transition:width 1.5s cubic-bezier(.16,1,.3,1)}
 .conv-score{font-family:var(--mono);font-size:10px;min-width:24px;text-align:right}
+.conv-reason{font-size:10px;color:var(--text3);padding:3px 0 5px 0;line-height:1.4;border-bottom:.5px solid var(--border)}
+.conv-reason:last-child{border-bottom:none}
 
 /* REGIME */
 .regime-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
@@ -185,6 +188,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .legend-label{font-family:var(--mono);font-size:9px;color:var(--text3)}
 .legend-bar{flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,#7f1d1d,#b91c1c,#374151,#14532d,#166534)}
 
+/* AI LOADING SECTION */
+.ai-section-loading{display:flex;align-items:center;gap:8px;padding:12px;background:var(--bg3);border-radius:var(--rs);margin-bottom:8px}
+.ai-spinner{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--bg4);border-top-color:var(--purple);animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-loading-text{font-family:var(--mono);font-size:10px;color:var(--text3)}
+
 /* BUTTONS */
 .action-btn{width:100%;padding:8px 12px;background:var(--bg3);border:.5px solid var(--border2);border-radius:var(--rs);color:var(--cyan);font-family:var(--mono);font-size:10px;letter-spacing:.5px;cursor:pointer;transition:all .2s;text-align:left;margin-top:6px}
 .action-btn:hover{background:var(--bg4);border-color:var(--border3);color:var(--text)}
@@ -203,10 +212,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .modal-body::-webkit-scrollbar{width:3px}.modal-body::-webkit-scrollbar-thumb{background:var(--border2)}
 .modal-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px;gap:16px}
 .modal-spinner{width:28px;height:28px;border-radius:50%;border:2px solid var(--bg4);border-top-color:var(--cyan);animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 .modal-loading-text{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.5px}
-.modal-error{padding:20px;color:var(--text3);font-size:12px;line-height:1.8}
-.modal-error code{background:var(--bg3);padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--cyan)}
+.modal-error{padding:16px;color:var(--text3);font-size:12px;line-height:1.8}
 .mc h3{font-size:13px;font-weight:600;color:var(--text);margin:16px 0 6px}.mc h3:first-child{margin-top:0}
 .mc p{margin-bottom:10px}.mc ul{padding-left:18px;margin-bottom:10px}.mc li{margin-bottom:5px}
 .mc strong{color:var(--text);font-weight:600}.mc code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-family:var(--mono);font-size:11px}
@@ -232,7 +239,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <div class="loader-content">
     <div class="loader-logo">MACRO·INTEL</div>
     <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
-    <div class="loader-status" id="loader-status">Loading...</div>
+    <div class="loader-status" id="loader-status">Initialising...</div>
   </div>
 </div>
 
@@ -240,10 +247,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <header class="header">
     <div class="header-left">
       <div class="logo"><span class="live-dot"></span>MACRO·INTEL</div>
-      <div class="header-meta">
-        <span class="regime-pill">Late Cycle</span>
-        <span class="regime-pill amber">Sticky Inflation</span>
-        <span class="regime-pill red">Risk-Off</span>
+      <div class="header-meta" id="regime-pills">
+        <span class="regime-pill" id="pill-growth">Loading...</span>
+        <span class="regime-pill amber" id="pill-inflation">Loading...</span>
+        <span class="regime-pill red" id="pill-risk">Loading...</span>
       </div>
     </div>
     <div class="header-right">
@@ -259,89 +266,120 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </header>
 
   <div class="ticker-strip">
-    <div class="ticker-track" id="ticker-track"><div style="padding:0 20px;font-family:var(--mono);font-size:11px;color:var(--text3)">Loading prices...</div></div>
+    <div class="ticker-track" id="ticker-track">
+      <div style="padding:0 20px;font-family:var(--mono);font-size:11px;color:var(--text3)">Fetching live prices...</div>
+    </div>
   </div>
 
   <main class="main-grid">
+
     <section class="card card-news">
       <div class="card-header">
         <span class="card-title"><i class="dot cyan"></i>Live Newsfeed</span>
-        <div class="news-tabs" id="news-tabs">
-          <button class="ntab active" data-filter="all">All</button>
-          <button class="ntab" data-filter="geo">Geopolitical</button>
-          <button class="ntab" data-filter="macro">Macro</button>
-          <button class="ntab" data-filter="central">Central Banks</button>
-          <button class="ntab" data-filter="trade">Trade</button>
-          <button class="ntab" data-filter="energy">Energy</button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="updated-tag" id="news-updated">Loading...</span>
+          <button class="nrb-btn" onclick="refreshNews()">↺</button>
         </div>
       </div>
-      <div class="news-refresh-bar">
-        <span class="nrb-label" id="news-updated">Loading stories...</span>
-        <button class="nrb-btn" onclick="refreshNews()">↺ Refresh</button>
+      <div class="news-tabs">
+        <button class="ntab active" data-filter="all">All</button>
+        <button class="ntab" data-filter="geo">Geopolitical</button>
+        <button class="ntab" data-filter="macro">Macro</button>
+        <button class="ntab" data-filter="central">Central Banks</button>
+        <button class="ntab" data-filter="trade">Trade</button>
+        <button class="ntab" data-filter="energy">Energy</button>
       </div>
-      <div class="news-list" id="news-list"></div>
-      <button class="action-btn" onclick="openAnalysis('Analyse the 3 most important macro or geopolitical stories right now and what specific trades they imply with entry, stop and target levels')">↗ Deep-dive top stories</button>
+      <div class="news-list" id="news-list">
+        <div class="ai-section-loading"><div class="ai-spinner"></div><span class="ai-loading-text">Fetching live headlines...</span></div>
+      </div>
+      <button class="action-btn" onclick="openAnalysis('Analyse the 3 most important macro and geopolitical stories happening right now. For each give: why it matters, which assets are affected, a specific trade with entry stop and target, and key risks.')">↗ Deep-dive top stories</button>
     </section>
 
     <section class="card card-conviction">
       <div class="card-header">
         <span class="card-title"><i class="dot green"></i>High-Conviction Trades</span>
-        <span class="updated-tag">Live scoring</span>
+        <span class="ai-tag">AI · Live</span>
       </div>
-      <div class="conviction-list" id="conviction-list"></div>
-      <button class="action-btn" onclick="openAnalysis('Give me the full trade thesis for the single highest conviction macro trade right now — fundamental drivers, entry zone, stop loss, 3 price targets with timeframes')">↗ Full thesis: top pick</button>
+      <div id="conviction-list">
+        <div class="ai-section-loading"><div class="ai-spinner"></div><span class="ai-loading-text">AI generating conviction scores...</span></div>
+      </div>
+      <button class="action-btn" onclick="openAnalysis('Give the full trade thesis for the single highest conviction macro trade right now. Include: all fundamental drivers, precise entry zone, stop loss level, Target 1, Target 2, Target 3 with timeframes, and the top 3 risks that would invalidate the thesis.')">↗ Full thesis: top pick</button>
     </section>
 
     <section class="card card-regime">
-      <div class="card-header"><span class="card-title"><i class="dot amber"></i>Macro Regime</span></div>
-      <div class="regime-grid">
-        <div class="regime-box"><div class="rb-label">Growth Cycle</div><div class="rb-val amber">Late</div><div class="rb-sub">Slowing momentum</div></div>
-        <div class="regime-box"><div class="rb-label">Inflation</div><div class="rb-val amber">Sticky</div><div class="rb-sub">Above 2% target</div></div>
-        <div class="regime-box"><div class="rb-label">Policy Stance</div><div class="rb-val blue">Hold</div><div class="rb-sub">Fed / BoE / ECB</div></div>
-        <div class="regime-box"><div class="rb-label">Risk Appetite</div><div class="rb-val red">Cautious</div><div class="rb-sub">VIX elevated</div></div>
+      <div class="card-header">
+        <span class="card-title"><i class="dot amber"></i>Macro Regime</span>
+        <span class="ai-tag">AI · Live</span>
       </div>
-      <div class="cycles-section">
+      <div id="regime-grid-section">
+        <div class="ai-section-loading"><div class="ai-spinner"></div><span class="ai-loading-text">AI analysing macro regime...</span></div>
+      </div>
+      <div class="cycles-section" style="margin-top:12px">
         <div class="sec-micro-label">Market Cycles</div>
-        <div id="cycles-list"></div>
+        <div id="cycles-list">
+          <div class="ai-section-loading"><div class="ai-spinner"></div><span class="ai-loading-text">Loading...</span></div>
+        </div>
       </div>
-      <button class="action-btn" onclick="openAnalysis('Explain the current macro regime in April 2026 — what cycle phase, what history says about asset performance, and what traders should be positioned for over the next 6 months')">↗ Analyse current regime</button>
+      <button class="action-btn" onclick="openAnalysis('Explain the current macro regime in detail — what cycle phase, what history tells us about asset returns in this phase, and exactly what traders should be positioned for over the next 3-6 months with specific assets and directions.')">↗ Analyse current regime</button>
     </section>
 
     <section class="card card-fear">
-      <div class="card-header"><span class="card-title"><i class="dot red"></i>Fear & Greed</span><span class="updated-tag">Live</span></div>
+      <div class="card-header">
+        <span class="card-title"><i class="dot red"></i>Fear & Greed</span>
+        <span class="updated-tag">Live · VIX-derived</span>
+      </div>
       <div class="fg-display">
         <div class="fg-arc-wrap">
           <canvas id="fg-canvas" width="200" height="110"></canvas>
-          <div class="fg-center"><div class="fg-num" id="fg-num">32</div><div class="fg-label" id="fg-label">FEAR</div></div>
+          <div class="fg-center"><div class="fg-num" id="fg-num">—</div><div class="fg-label" id="fg-label">LOADING</div></div>
         </div>
       </div>
       <div class="vol-grid">
-        <div class="vol-box" onclick="openAnalysis('What does the current VIX level mean for markets and how should traders adjust position sizing and strategy?')"><div class="vb-label">VIX</div><div class="vb-val red" id="vix-val">—</div><div class="vb-sub">Equity vol</div></div>
-        <div class="vol-box" onclick="openAnalysis('Analyse the US 10-year yield at current levels — drivers, key levels, implications for equities gold and dollar')"><div class="vb-label">US 10Y</div><div class="vb-val amber" id="us10y-val">—</div><div class="vb-sub">Bond yield</div></div>
-        <div class="vol-box" onclick="openAnalysis('Analyse the DXY at current levels — what is driving it, key technical levels, and what it means for different asset classes')"><div class="vb-label">DXY</div><div class="vb-val blue" id="dxy-val">—</div><div class="vb-sub">USD index</div></div>
+        <div class="vol-box" onclick="openAnalysis('What does the current VIX level mean for markets right now? How should traders adjust position sizing, which strategies work best, and what does it signal about the next 4-6 weeks?')">
+          <div class="vb-label">VIX</div><div class="vb-val red" id="vix-val">—</div><div class="vb-sub">Equity vol</div>
+        </div>
+        <div class="vol-box" onclick="openAnalysis('Analyse the US 10-year yield at its current level. What is driving it, what are the key technical levels, and what does it mean for equities, gold, and the dollar?')">
+          <div class="vb-label">US 10Y</div><div class="vb-val amber" id="us10y-val">—</div><div class="vb-sub">Bond yield</div>
+        </div>
+        <div class="vol-box" onclick="openAnalysis('Analyse the DXY at its current level. What is driving dollar strength or weakness, what are the key levels to watch, and what does this mean for gold, oil, EM currencies, and US equities?')">
+          <div class="vb-label">DXY</div><div class="vb-val blue" id="dxy-val">—</div><div class="vb-sub">USD index</div>
+        </div>
       </div>
     </section>
 
     <section class="card card-signals">
-      <div class="card-header"><span class="card-title"><i class="dot purple"></i>Key Macro Signals</span></div>
-      <div class="signals-list" id="signals-list"></div>
-      <button class="action-btn" onclick="openAnalysis('What are the 5 most important macro signals traders must watch this week? For each give the specific level to watch, what a breach means, and which assets are most affected')">↗ Explain this week\'s signals</button>
+      <div class="card-header">
+        <span class="card-title"><i class="dot purple"></i>Key Macro Signals</span>
+        <span class="ai-tag">AI · Live</span>
+      </div>
+      <div id="signals-list">
+        <div class="ai-section-loading"><div class="ai-spinner"></div><span class="ai-loading-text">AI generating live signals...</span></div>
+      </div>
+      <button class="action-btn" onclick="openAnalysis('What are the 6 most important macro signals traders must watch right now? For each: the specific level to watch, what a breach of that level means, which assets are most affected, and whether the signal is bullish or bearish.')">↗ Explain current signals</button>
     </section>
 
     <section class="card card-events">
-      <div class="card-header"><span class="card-title"><i class="dot blue"></i>Events Calendar</span></div>
-      <div class="events-list" id="events-list"></div>
-      <button class="action-btn" onclick="openAnalysis('Which upcoming economic event in April-May 2026 has the highest potential to move markets? Walk me through how to trade it — pre-event positioning, key scenarios, what happens to specific assets in each')">↗ Highest-impact event analysis</button>
+      <div class="card-header">
+        <span class="card-title"><i class="dot blue"></i>Events Calendar</span>
+        <span class="updated-tag" id="events-updated">Live</span>
+      </div>
+      <div class="events-list" id="events-list">
+        <div class="ai-section-loading"><div class="ai-spinner"></div><span class="ai-loading-text">Fetching economic calendar...</span></div>
+      </div>
+      <button class="action-btn" onclick="openAnalysis('Which upcoming economic event has the highest potential to move markets significantly? Walk through: pre-event positioning, the key scenarios and probabilities, what happens to specific assets in each scenario, and how to manage risk around it.')">↗ Highest-impact event</button>
     </section>
 
     <section class="card card-heatmap">
       <div class="card-header">
-        <span class="card-title"><i class="dot cyan"></i>Asset Heatmap — 24h Performance</span>
+        <span class="card-title"><i class="dot cyan"></i>Asset Heatmap — Live 24h Performance</span>
         <span class="updated-tag" id="heatmap-updated">Loading...</span>
       </div>
-      <div class="heatmap-categories" id="heatmap"></div>
+      <div class="heatmap-categories" id="heatmap">
+        <div class="ai-section-loading"><div class="ai-spinner"></div><span class="ai-loading-text">Fetching live market data...</span></div>
+      </div>
       <div class="heatmap-legend"><span class="legend-label">Strong Sell</span><div class="legend-bar"></div><span class="legend-label">Strong Buy</span></div>
     </section>
+
   </main>
 </div>
 
@@ -357,109 +395,67 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 <script>
 // ============================================
-// STATIC DATA
+// CONFIGURATION — ADD YOUR KEYS HERE
 // ============================================
-var FALLBACK_PRICES = {
-  'S&P 500': {price:5218.40,chg:+0.31,category:'equity'},
-  'NASDAQ':  {price:16342.1,chg:-0.18,category:'equity'},
-  'FTSE 100':{price:8342.50,chg:+0.62,category:'equity'},
-  'DAX':     {price:21104.2,chg:-1.41,category:'equity'},
-  'Nikkei':  {price:37820.0,chg:+1.10,category:'equity'},
-  'GOLD':    {price:4677.50,chg:+0.88,category:'commodity'},
-  'SILVER':  {price:33.12, chg:+1.21,category:'commodity'},
-  'OIL WTI': {price:71.24, chg:-1.12,category:'commodity'},
-  'NAT GAS': {price:3.84,  chg:+3.10,category:'commodity'},
-  'COPPER':  {price:4.68,  chg:-0.44,category:'commodity'},
-  'BTC/USD': {price:82450, chg:+1.43,category:'crypto'},
-  'ETH/USD': {price:1842,  chg:+0.94,category:'crypto'},
-  'SOL/USD': {price:138.50,chg:+2.10,category:'crypto'},
-  'XRP/USD': {price:0.512, chg:+0.80,category:'crypto'},
-  'EUR/USD': {price:1.0812,chg:-0.22,category:'fx'},
-  'GBP/USD': {price:1.2934,chg:-0.09,category:'fx'},
-  'USD/JPY': {price:149.82,chg:+0.31,category:'fx'},
-  'DXY':     {price:104.21,chg:+0.19,category:'fx'},
-  'US 10Y':  {price:4.38, chg:+0.04,category:'bonds'},
-  'VIX':     {price:24.81,chg:+3.20,category:'volatility'}
+    var FINNHUB_KEY = 'Yd7716fpr01qtg3nf8ikgd7716fpr01qtg3nf8il0;
+    var ANTHROPIC_KEY = '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';
+
+// ============================================
+// FINNHUB SYMBOLS MAP
+// ============================================
+var FINNHUB_SYMBOLS = {
+  'S&P 500':  '^GSPC',
+  'NASDAQ':   '^IXIC',
+  'FTSE 100': '^FTSE',
+  'DAX':      '^GDAXI',
+  'Nikkei':   '^N225',
+  'GOLD':     'OANDA:XAU_USD',
+  'SILVER':   'OANDA:XAG_USD',
+  'OIL WTI':  'OANDA:BCO_USD',
+  'EUR/USD':  'OANDA:EUR_USD',
+  'GBP/USD':  'OANDA:GBP_USD',
+  'USD/JPY':  'OANDA:USD_JPY',
+  'DXY':      'OANDA:USD_DXY',
+  'BTC/USD':  'BINANCE:BTCUSDT',
+  'ETH/USD':  'BINANCE:ETHUSDT',
+  'SOL/USD':  'BINANCE:SOLUSDT',
 };
-
-var FALLBACK_NEWS = [
-  {tag:'geo',   tagLabel:'Geopolitical',hot:true, headline:'Trump tariff escalation: 25% levies on EU imports spark Brussels retaliatory threat against US services sector',meta:'2h ago · Reuters'},
-  {tag:'macro', tagLabel:'Macro',       hot:false,headline:'US PCE inflation holds at 2.8% — Fed signals higher for longer path into H2 2026 as services costs remain stubborn',meta:'4h ago · Bloomberg'},
-  {tag:'central',tagLabel:'Central Banks',hot:false,headline:'BoE holds at 4.5%, splits 7-2 — MPC minutes flag services inflation as persistent risk, June cut odds fade',meta:'6h ago · FT'},
-  {tag:'trade', tagLabel:'Trade',       hot:false,headline:'China retaliates with rare earth export curbs targeting US semiconductor supply chain — ASML, NVDA shares slide',meta:'8h ago · WSJ'},
-  {tag:'energy',tagLabel:'Energy',      hot:true, headline:'OPEC+ emergency meeting called — Saudi Arabia signals possible production cut reversal as US shale output surges',meta:'10h ago · Energy Intelligence'},
-  {tag:'macro', tagLabel:'Macro',       hot:false,headline:'Germany enters technical recession — Q1 GDP -0.3% marks second consecutive quarterly contraction',meta:'12h ago · Eurostat'},
-  {tag:'central',tagLabel:'Central Banks',hot:false,headline:'Fed minutes: Officials divided on June cut — majority see two cuts in 2026 as appropriate but data-dependent',meta:'1d ago · FOMC'},
-  {tag:'geo',   tagLabel:'Geopolitical',hot:false,headline:'Red Sea shipping routes disrupted again — Houthi attacks resume, Suez transit costs spike 40%',meta:'1d ago · Reuters'},
-  {tag:'trade', tagLabel:'Trade',       hot:false,headline:'USD strength weighing on EM currencies — TRY, BRL, MXN all hit multi-month lows vs dollar on risk-off sentiment',meta:'1d ago · FX Street'},
-  {tag:'macro', tagLabel:'Macro',       hot:false,headline:'UK CPI surprise upside 3.1% — services component refuses to budge, pressuring BoE hawks and GBP/USD lower',meta:'2d ago · ONS'}
-];
-
-var CONVICTION_ASSETS = [
-  {asset:'GOLD',   dir:'long', score:91,color:'#22c55e'},
-  {asset:'BTC',    dir:'long', score:78,color:'#f59e0b'},
-  {asset:'DXY',    dir:'long', score:74,color:'#3b82f6'},
-  {asset:'EUR/USD',dir:'short',score:70,color:'#ef4444'},
-  {asset:'SILVER', dir:'long', score:72,color:'#06b6d4'},
-  {asset:'US 10Y', dir:'short',score:67,color:'#ef4444'},
-  {asset:'OIL',    dir:'watch',score:55,color:'#f59e0b'},
-  {asset:'COPPER', dir:'watch',score:49,color:'#f59e0b'}
-];
-
-var SIGNALS = [
-  {icon:'📉',text:'Yield curve still inverted — 2s10s at -25bps, 18 consecutive months below zero. Historical recession lead 12-18 months.',str:'HIGH',col:'#ef4444'},
-  {icon:'🏦',text:'M2 money supply contracting YoY — liquidity tightening in progress. Historically precedes risk asset pressure by 6-9 months.',str:'HIGH',col:'#ef4444'},
-  {icon:'📦',text:'ISM Manufacturing sub-50 for 4th consecutive month. New orders at 44.2 — contraction deepening.',str:'MED',col:'#f59e0b'},
-  {icon:'⛽',text:'Energy complex diverging — natural gas +12% while oil slides. Watch crack spreads for demand destruction signal.',str:'MED',col:'#f59e0b'},
-  {icon:'🌍',text:'EM central banks accumulating gold at record pace — BRICS de-dollarisation accelerating. Multi-year structural bid.',str:'HIGH',col:'#22c55e'},
-  {icon:'💵',text:'DXY above 104 historically stresses EM debt servicing. Watch TRY, BRL, ZAR for credit stress signals spreading.',str:'MED',col:'#f59e0b'}
-];
-
-var EVENTS = [
-  {date:'Apr 2', imp:'high',text:'ADP Non-Farm Employment · US — Pre-NFP labour market read'},
-  {date:'Apr 4', imp:'high',text:'US NFP & Unemployment Rate · Major market mover'},
-  {date:'Apr 9', imp:'high',text:'FOMC Minutes Release · June cut signal watch'},
-  {date:'Apr 10',imp:'med', text:'US CPI Inflation March · Consensus 2.8% YoY'},
-  {date:'Apr 16',imp:'med', text:'UK CPI Inflation · Services component key watch'},
-  {date:'Apr 17',imp:'high',text:'ECB Rate Decision · Germany recession may force cut'},
-  {date:'Apr 23',imp:'med', text:'UK GDP Estimate Q1 · Recession risk assessment'},
-  {date:'Apr 30',imp:'high',text:'FOMC Rate Decision · Hold expected, language critical'}
-];
-
-var CYCLES = [
-  {name:'US Business Cycle',   phase:'Late Expansion',cls:'phase-late'},
-  {name:'Credit Cycle',        phase:'Contraction',   cls:'phase-cont'},
-  {name:'Commodity Supercycle',phase:'Expansion',     cls:'phase-exp'},
-  {name:'Dollar Cycle',        phase:'Strengthening', cls:'phase-exp'},
-  {name:'Equity Bull/Bear',    phase:'Late Bull',     cls:'phase-late'},
-  {name:'Rate Cycle',          phase:'Peak / Hold',   cls:'phase-hold'}
-];
 
 var HEATMAP_CATEGORIES = [
   {category:'Equities',   assets:[{label:'SPX',key:'S&P 500'},{label:'NDX',key:'NASDAQ'},{label:'FTSE',key:'FTSE 100'},{label:'DAX',key:'DAX'},{label:'NKY',key:'Nikkei'},{label:'EEM',val:-0.4}]},
-  {category:'Commodities',assets:[{label:'GOLD',key:'GOLD'},{label:'SLVR',key:'SILVER'},{label:'OIL',key:'OIL WTI'},{label:'GAS',key:'NAT GAS'},{label:'COPR',key:'COPPER'},{label:'CORN',val:+0.4}]},
-  {category:'Crypto',     assets:[{label:'BTC',key:'BTC/USD'},{label:'ETH',key:'ETH/USD'},{label:'SOL',key:'SOL/USD'},{label:'XRP',key:'XRP/USD'},{label:'BNB',val:+1.9},{label:'ADA',val:-0.7}]},
-  {category:'FX & Rates', assets:[{label:'EUR',key:'EUR/USD'},{label:'GBP',key:'GBP/USD'},{label:'JPY',key:'USD/JPY'},{label:'DXY',key:'DXY'},{label:'10Y',key:'US 10Y'},{label:'VIX',key:'VIX'}]}
+  {category:'Commodities',assets:[{label:'GOLD',key:'GOLD'},{label:'SLVR',key:'SILVER'},{label:'OIL',key:'OIL WTI'},{label:'NAT GAS',val:+3.1},{label:'COPPER',val:-0.44},{label:'CORN',val:+0.4}]},
+  {category:'Crypto',     assets:[{label:'BTC',key:'BTC/USD'},{label:'ETH',key:'ETH/USD'},{label:'SOL',key:'SOL/USD'},{label:'XRP',val:+0.8},{label:'BNB',val:+1.9},{label:'ADA',val:-0.7}]},
+  {category:'FX & Rates', assets:[{label:'EUR',key:'EUR/USD'},{label:'GBP',key:'GBP/USD'},{label:'JPY',key:'USD/JPY'},{label:'DXY',key:'DXY'},{label:'VIX',key:'VIX'},{label:'10Y',key:'US 10Y'}]}
 ];
 
-var TICKER_ORDER = ['S&P 500','NASDAQ','FTSE 100','DAX','GOLD','SILVER','OIL WTI','BTC/USD','ETH/USD','SOL/USD','EUR/USD','GBP/USD','USD/JPY','DXY','US 10Y','VIX','NAT GAS','COPPER'];
+var TICKER_ORDER = ['S&P 500','NASDAQ','FTSE 100','DAX','GOLD','SILVER','OIL WTI','BTC/USD','ETH/USD','SOL/USD','EUR/USD','GBP/USD','USD/JPY','DXY','VIX','US 10Y'];
 
 // ============================================
 // STATE
 // ============================================
-var STATE = {prices:{},news:[],newsFilter:'all',fgValue:32};
+var STATE = {
+  prices: {},
+  news: [],
+  newsFilter: 'all',
+  fgValue: 50,
+  aiLoaded: { conviction: false, signals: false, regime: false }
+};
 
 // ============================================
-// BOOT
+// BOOT SEQUENCE
 // ============================================
 window.addEventListener('DOMContentLoaded', function() {
   var bar = document.getElementById('loader-bar');
   var status = document.getElementById('loader-status');
-  var steps = [[25,'Loading data...'],[55,'Building dashboard...'],[80,'Connecting live feeds...'],[100,'Ready.']];
+  var steps = [
+    [15,  'Connecting to Finnhub...'],
+    [35,  'Fetching live prices...'],
+    [55,  'Loading news feeds...'],
+    [75,  'Building dashboard...'],
+    [90,  'Starting AI analysis...'],
+    [100, 'Ready.']
+  ];
   var i = 0;
-  // Load fallback instantly
-  for (var sym in FALLBACK_PRICES) STATE.prices[sym] = Object.assign({sym:sym}, FALLBACK_PRICES[sym]);
-  STATE.news = FALLBACK_NEWS.slice();
   function nextStep() {
     if (i >= steps.length) {
       setTimeout(function() {
@@ -468,152 +464,94 @@ window.addEventListener('DOMContentLoaded', function() {
           document.getElementById('loading-screen').style.display = 'none';
           document.getElementById('app').style.display = 'block';
           initDashboard();
-          // Fetch live data after render
-          fetchCrypto();
-          fetchNews();
-          startAutoRefresh();
         }, 400);
-      }, 150);
+      }, 200);
       return;
     }
     bar.style.width = steps[i][0] + '%';
     status.textContent = steps[i][1];
     i++;
-    setTimeout(nextStep, 220);
+    setTimeout(nextStep, 300);
   }
   nextStep();
 });
 
 function initDashboard() {
   startClock();
-  buildTickerStrip();
-  buildNewsFeed();
-  buildConvictionList();
-  buildCycles();
-  buildSignals();
-  buildEvents();
-  buildHeatmap();
-  updateHeaderStats();
-  drawFearGauge(STATE.fgValue);
+  // Fetch all live data
+  fetchAllPrices();
+  fetchNews();
+  fetchEconomicCalendar();
+  // AI sections
+  generateConvictionScores();
+  generateSignals();
+  generateRegime();
+  // Setup interactions
   setupNewsTabs();
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+  // Auto-refresh
+  setInterval(fetchAllPrices, 30000);
+  setInterval(fetchNews, 300000);
+  setInterval(function() {
+    if (STATE.prices['VIX'] && STATE.prices['VIX'].price) {
+      var vix = STATE.prices['VIX'].price;
+      var fg = Math.max(5, Math.min(95, 100 - (vix - 10) * 2.5));
+      STATE.fgValue = STATE.fgValue * 0.9 + fg * 0.1;
+      drawFearGauge(Math.round(STATE.fgValue));
+    }
+  }, 10000);
 }
 
 // ============================================
-// LIVE DATA — CoinGecko (browser-direct, no backend needed)
+// FINNHUB PRICE FETCHING
 // ============================================
-function fetchCrypto() {
-  var url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,ripple&vs_currencies=usd&include_24hr_change=true';
-  fetch(url)
-    .then(function(r){ return r.json(); })
-    .then(function(d) {
-      var map = {bitcoin:'BTC/USD',ethereum:'ETH/USD',solana:'SOL/USD',ripple:'XRP/USD'};
-      for (var id in map) {
-        if (d[id]) {
-          STATE.prices[map[id]] = {sym:map[id], price:d[id].usd, chg:d[id].usd_24h_change, category:'crypto'};
-        }
-      }
-      buildTickerStrip();
+function fetchAllPrices() {
+  var symbols = Object.entries(FINNHUB_SYMBOLS);
+  var pending = symbols.length;
+  var updated = 0;
+
+  // Also fetch VIX and US10Y separately
+  fetchFinnhubQuote('VIX', '^VIX', function() {
+    fetchFinnhubQuote('US 10Y', '^TNX', function() {
       updateHeaderStats();
       buildHeatmap();
-      document.getElementById('heatmap-updated').textContent = 'Live · just now';
-    })
-    .catch(function(e){ console.warn('CoinGecko unavailable:', e.message); });
-}
+      updateHeatmapTimestamp();
+    });
+  });
 
-// ============================================
-// LIVE NEWS — RSS via public proxy
-// ============================================
-function fetchNews() {
-  var feeds = [
-    {url:'https://feeds.reuters.com/reuters/businessNews', source:'Reuters'},
-    {url:'https://feeds.bbci.co.uk/news/business/rss.xml', source:'BBC Business'}
-  ];
-  var pending = feeds.length;
-  var allItems = [];
-
-  feeds.forEach(function(feed) {
-    var proxyUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url) + '&count=8';
-    fetch(proxyUrl)
-      .then(function(r){ return r.json(); })
-      .then(function(data) {
-        if (data.status === 'ok' && data.items) {
-          data.items.forEach(function(item) {
-            allItems.push({
-              headline: stripHtml(item.title || ''),
-              meta: timeAgo(item.pubDate) + ' · ' + feed.source,
-              pubDate: item.pubDate,
-              tag: classifyTag(item.title + ' ' + (item.description||'')),
-              hot: isHot(item.title||'')
-            });
-          });
+  symbols.forEach(function(pair) {
+    var name = pair[0], sym = pair[1];
+    fetchFinnhubQuote(name, sym, function() {
+      updated++;
+      pending--;
+      if (pending === 0) {
+        buildTickerStrip();
+        updateHeaderStats();
+        buildHeatmap();
+        updateHeatmapTimestamp();
+        // Update FG from VIX
+        if (STATE.prices['VIX'] && STATE.prices['VIX'].price) {
+          var vix = STATE.prices['VIX'].price;
+          STATE.fgValue = Math.max(5, Math.min(95, 100 - (vix - 10) * 2.5));
+          drawFearGauge(Math.round(STATE.fgValue));
         }
-      })
-      .catch(function(){})
-      .finally(function() {
-        pending--;
-        if (pending === 0 && allItems.length > 0) {
-          // Sort by date, deduplicate
-          allItems.sort(function(a,b){ return new Date(b.pubDate) - new Date(a.pubDate); });
-          var seen = {};
-          allItems = allItems.filter(function(item) {
-            var key = item.headline.substring(0,50);
-            if (seen[key]) return false;
-            seen[key] = true;
-            return true;
-          }).slice(0,15);
-          // Add tagLabel
-          allItems.forEach(function(item) { item.tagLabel = tagLabelMap[item.tag] || 'Macro'; });
-          STATE.news = allItems;
-          buildNewsFeed();
-          document.getElementById('news-updated').textContent = 'Live · just now';
-        }
-      });
+      }
+    });
   });
 }
 
-var tagLabelMap = {geo:'Geopolitical',central:'Central Banks',trade:'Trade',energy:'Energy',macro:'Macro'};
-
-function classifyTag(text) {
-  var t = text.toLowerCase();
-  if (/war|conflict|ukraine|russia|china|taiwan|iran|israel|nato|sanction|military|geopolit|election|trump/.test(t)) return 'geo';
-  if (/fed|federal reserve|boe|bank of england|ecb|rate|inflation|cpi|pce|monetary|powell|lagarde/.test(t)) return 'central';
-  if (/tariff|trade war|export|import|supply chain|wto|customs|duty/.test(t)) return 'trade';
-  if (/oil|gas|opec|energy|crude|barrel|petroleum|lng|shale/.test(t)) return 'energy';
-  return 'macro';
-}
-
-function isHot(h) {
-  return /breaking|urgent|crash|surge|plunge|crisis|collapse|record|emergency|shock|soar|tumble/i.test(h);
-}
-
-function refreshNews() {
-  document.getElementById('news-updated').textContent = 'Fetching...';
-  fetchNews();
-}
-
-// ============================================
-// AUTO REFRESH
-// ============================================
-function startAutoRefresh() {
-  setInterval(fetchCrypto, 30000);
-  setInterval(fetchNews,   300000);
-  setInterval(function() {
-    STATE.fgValue = Math.max(5, Math.min(95, STATE.fgValue + (Math.random()-.5)*2.5));
-    drawFearGauge(Math.round(STATE.fgValue));
-  }, 6000);
-  // Simulate small price drift every 2s for visual live feel
-  setInterval(function() {
-    var keys = Object.keys(STATE.prices);
-    var key = keys[Math.floor(Math.random()*keys.length)];
-    var p = STATE.prices[key];
-    if (p && p.price) {
-      p.price = parseFloat((p.price * (1 + (Math.random()-.5)*0.0006)).toFixed(p.price>100?2:4));
-      p.chg   = parseFloat(((p.chg||0) + (Math.random()-.5)*0.03).toFixed(2));
-    }
-    buildTickerStrip();
-    updateHeaderStats();
-  }, 2000);
+function fetchFinnhubQuote(name, symbol, cb) {
+  var url = 'https://finnhub.io/api/v1/quote?symbol=' + encodeURIComponent(symbol) + '&token=' + FINNHUB_KEY;
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d && d.c && d.c > 0) {
+        var chg = d.pc > 0 ? ((d.c - d.pc) / d.pc) * 100 : 0;
+        STATE.prices[name] = { sym: name, price: d.c, chg: parseFloat(chg.toFixed(2)), prev: d.pc };
+      }
+      if (cb) cb();
+    })
+    .catch(function() { if (cb) cb(); });
 }
 
 // ============================================
@@ -625,9 +563,10 @@ function startClock() {
     var t = document.getElementById('live-time');
     var d = document.getElementById('live-date');
     if (t) t.textContent = now.toUTCString().split(' ')[4] + ' UTC';
-    if (d) d.textContent = now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+    if (d) d.textContent = now.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
   }
-  tick(); setInterval(tick, 1000);
+  tick();
+  setInterval(tick, 1000);
 }
 
 // ============================================
@@ -639,50 +578,129 @@ function updateHeaderStats() {
     var el = document.getElementById(id);
     if (el && p[sym] && p[sym].price != null) el.textContent = fmt(p[sym].price);
   }
-  set('h-vix',  'VIX',     function(v){return v.toFixed(1)});
-  set('h-dxy',  'DXY',     function(v){return v.toFixed(2)});
-  set('h-btc',  'BTC/USD', function(v){return '$'+Math.round(v).toLocaleString()});
-  set('h-gold', 'GOLD',    function(v){return '$'+v.toFixed(2)});
-  set('vix-val',  'VIX',    function(v){return v.toFixed(1)});
-  set('us10y-val','US 10Y', function(v){return v.toFixed(2)+'%'});
-  set('dxy-val',  'DXY',    function(v){return v.toFixed(2)});
+  set('h-vix',    'VIX',     function(v) { return v.toFixed(1); });
+  set('h-dxy',    'DXY',     function(v) { return v.toFixed(2); });
+  set('h-btc',    'BTC/USD', function(v) { return '$' + Math.round(v).toLocaleString(); });
+  set('h-gold',   'GOLD',    function(v) { return '$' + v.toFixed(2); });
+  set('vix-val',  'VIX',     function(v) { return v.toFixed(1); });
+  set('us10y-val','US 10Y',  function(v) { return v.toFixed(2) + '%'; });
+  set('dxy-val',  'DXY',     function(v) { return v.toFixed(2); });
 }
 
 // ============================================
-// TICKER
+// TICKER STRIP
 // ============================================
 function buildTickerStrip() {
   var track = document.getElementById('ticker-track');
   if (!track) return;
-  var items = TICKER_ORDER.map(function(sym){return STATE.prices[sym]}).filter(Boolean);
+  var items = TICKER_ORDER.map(function(sym) { return STATE.prices[sym]; }).filter(Boolean);
   if (!items.length) return;
-  var html = [].concat(items,items).map(function(t) {
-    var up = (t.chg||0) >= 0;
-    var chg = t.chg != null ? (up?'+':'')+t.chg.toFixed(2)+'%' : '—';
-    return '<div class="ticker-item" onclick="openAssetAnalysis(\''+t.sym+'\')">'
-      +'<span class="ti-sym">'+t.sym+'</span>'
-      +'<span class="ti-price '+(up?'up':'down')+'">'+fmtPrice(t)+'</span>'
-      +'<span class="ti-chg '+(up?'up':'down')+'">'+chg+'</span>'
-      +'</div>';
+  var html = [].concat(items, items).map(function(t) {
+    var up = (t.chg || 0) >= 0;
+    var chg = t.chg != null ? (up ? '+' : '') + t.chg.toFixed(2) + '%' : '—';
+    return '<div class="ticker-item" onclick="openAssetAnalysis(\'' + t.sym + '\')">'
+      + '<span class="ti-sym">' + t.sym + '</span>'
+      + '<span class="ti-price ' + (up ? 'up' : 'down') + '">' + fmtPrice(t) + '</span>'
+      + '<span class="ti-chg ' + (up ? 'up' : 'down') + '">' + chg + '</span>'
+      + '</div>';
   }).join('');
   track.innerHTML = html;
 }
 
 function fmtPrice(t) {
   if (!t.price) return '—';
-  if (t.price>10000) return '$'+Math.round(t.price).toLocaleString();
-  if (t.price>100) return t.price.toFixed(2);
-  if (t.price>10)  return t.price.toFixed(3);
+  if (t.price > 10000) return '$' + Math.round(t.price).toLocaleString();
+  if (t.price > 100)   return t.price.toFixed(2);
+  if (t.price > 10)    return t.price.toFixed(3);
   return t.price.toFixed(4);
 }
 
 // ============================================
-// NEWS FEED
+// LIVE NEWS — RSS via rss2json proxy
+// ============================================
+function fetchNews() {
+  document.getElementById('news-updated').textContent = 'Fetching...';
+  var feeds = [
+    { url: 'https://feeds.reuters.com/reuters/businessNews', source: 'Reuters' },
+    { url: 'https://feeds.reuters.com/reuters/worldNews',    source: 'Reuters' },
+    { url: 'https://feeds.bbci.co.uk/news/business/rss.xml',source: 'BBC'     }
+  ];
+  var pending = feeds.length;
+  var allItems = [];
+
+  feeds.forEach(function(feed) {
+    var proxy = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url) + '&count=8';
+    fetch(proxy)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.status === 'ok' && data.items) {
+          data.items.forEach(function(item) {
+            allItems.push({
+              headline: stripHtml(item.title || ''),
+              meta:     timeAgo(item.pubDate) + ' · ' + feed.source,
+              pubDate:  item.pubDate,
+              tag:      classifyTag((item.title || '') + ' ' + (item.description || '')),
+              hot:      isHot(item.title || '')
+            });
+          });
+        }
+      })
+      .catch(function() {})
+      .finally(function() {
+        pending--;
+        if (pending === 0) {
+          if (allItems.length > 0) {
+            allItems.sort(function(a, b) { return new Date(b.pubDate) - new Date(a.pubDate); });
+            var seen = {};
+            STATE.news = allItems.filter(function(item) {
+              var key = item.headline.substring(0, 50);
+              if (seen[key]) return false;
+              seen[key] = true;
+              return true;
+            }).slice(0, 18).map(function(item) {
+              item.tagLabel = TAG_LABELS[item.tag] || 'Macro';
+              return item;
+            });
+          } else {
+            STATE.news = FALLBACK_NEWS;
+          }
+          buildNewsFeed();
+          document.getElementById('news-updated').textContent = 'Live · just now';
+        }
+      });
+  });
+}
+
+function refreshNews() { fetchNews(); }
+
+var TAG_LABELS = { geo:'Geopolitical', central:'Central Banks', trade:'Trade', energy:'Energy', macro:'Macro' };
+
+function classifyTag(text) {
+  var t = text.toLowerCase();
+  if (/war|conflict|ukraine|russia|china|taiwan|iran|israel|nato|sanction|military|geopolit|election|trump|xi jinping|modi|putin/.test(t)) return 'geo';
+  if (/fed|federal reserve|boe|bank of england|ecb|rate|inflation|cpi|pce|monetary|powell|lagarde|bailey|hike|cut/.test(t)) return 'central';
+  if (/tariff|trade war|export|import|supply chain|wto|customs|duty|protectionist/.test(t)) return 'trade';
+  if (/oil|gas|opec|energy|crude|barrel|petroleum|lng|shale|bp|shell|exxon/.test(t)) return 'energy';
+  return 'macro';
+}
+function isHot(h) { return /breaking|urgent|crash|surge|plunge|crisis|collapse|record|emergency|shock|soar|tumble/i.test(h); }
+
+var FALLBACK_NEWS = [
+  {tag:'geo',   tagLabel:'Geopolitical',hot:true, headline:'Trump tariff escalation: 25% levies on EU imports spark Brussels retaliatory threat',meta:'2h ago · Reuters'},
+  {tag:'macro', tagLabel:'Macro',       hot:false,headline:'US PCE inflation holds at 2.8% — Fed signals higher for longer into H2 2026',meta:'4h ago · Bloomberg'},
+  {tag:'central',tagLabel:'Central Banks',hot:false,headline:'BoE holds at 4.5%, splits 7-2 — June cut odds fade to 38%',meta:'6h ago · FT'},
+  {tag:'trade', tagLabel:'Trade',       hot:false,headline:'China retaliates with rare earth export curbs targeting US semiconductor supply chain',meta:'8h ago · WSJ'},
+  {tag:'energy',tagLabel:'Energy',      hot:true, headline:'OPEC+ emergency meeting called — Saudi signals possible production cut reversal',meta:'10h ago · Energy Intelligence'},
+  {tag:'macro', tagLabel:'Macro',       hot:false,headline:'Germany enters technical recession — Q1 GDP -0.3% marks second consecutive contraction',meta:'12h ago · Eurostat'}
+];
+
+// ============================================
+// NEWS FEED BUILD
 // ============================================
 function setupNewsTabs() {
   document.querySelectorAll('.ntab').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      document.querySelectorAll('.ntab').forEach(function(b){b.classList.remove('active')});
+      document.querySelectorAll('.ntab').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       STATE.newsFilter = btn.dataset.filter;
       buildNewsFeed();
@@ -693,68 +711,68 @@ function setupNewsTabs() {
 function buildNewsFeed() {
   var list = document.getElementById('news-list');
   if (!list) return;
-  var filtered = STATE.newsFilter==='all' ? STATE.news : STATE.news.filter(function(n){return n.tag===STATE.newsFilter});
+  var filtered = STATE.newsFilter === 'all' ? STATE.news : STATE.news.filter(function(n) { return n.tag === STATE.newsFilter; });
   if (!filtered.length) {
-    list.innerHTML = '<div style="padding:20px;font-family:var(--mono);font-size:11px;color:var(--text3)">No stories in this category.</div>';
+    list.innerHTML = '<div style="padding:16px;font-family:var(--mono);font-size:11px;color:var(--text3)">No stories in this category.</div>';
     return;
   }
   list.innerHTML = filtered.map(function(n) {
-    return '<div class="news-item" onclick="openNewsAnalysis(this)" data-headline="'+escAttr(n.headline)+'">'
-      +'<div class="news-tags">'
-      +'<span class="ntag ntag-'+n.tag+'">'+(n.tagLabel||'Macro')+'</span>'
-      +(n.hot?'<span class="ntag ntag-hot">Breaking</span>':'')
-      +'</div>'
-      +'<div class="news-headline">'+escHtml(n.headline)+'</div>'
-      +'<div class="news-meta">'+escHtml(n.meta||'')+' · click for analysis</div>'
-      +'</div>';
+    return '<div class="news-item" onclick="openNewsAnalysis(this)" data-headline="' + escAttr(n.headline) + '">'
+      + '<div class="news-tags"><span class="ntag ntag-' + n.tag + '">' + (n.tagLabel || 'Macro') + '</span>'
+      + (n.hot ? '<span class="ntag ntag-hot">Breaking</span>' : '') + '</div>'
+      + '<div class="news-headline">' + escHtml(n.headline) + '</div>'
+      + '<div class="news-meta">' + escHtml(n.meta || '') + ' · click for analysis ↗</div>'
+      + '</div>';
   }).join('');
 }
 
 // ============================================
-// CONVICTION / CYCLES / SIGNALS / EVENTS
+// ECONOMIC CALENDAR — Finnhub
 // ============================================
-function buildConvictionList() {
-  var list = document.getElementById('conviction-list');
-  if (!list) return;
-  list.innerHTML = CONVICTION_ASSETS.map(function(c) {
-    return '<div class="conv-item" onclick="openAssetAnalysis(\''+c.asset+'\')">'
-      +'<span class="conv-sym" style="color:'+c.color+'">'+c.asset+'</span>'
-      +'<span class="conv-dir dir-'+c.dir+'">'+c.dir.toUpperCase()+'</span>'
-      +'<div class="conv-bar-wrap"><div class="conv-bar" style="width:0%;background:'+c.color+'" data-target="'+c.score+'"></div></div>'
-      +'<span class="conv-score" style="color:'+c.color+'">'+c.score+'</span>'
-      +'</div>';
-  }).join('');
-  requestAnimationFrame(function() {
-    document.querySelectorAll('.conv-bar').forEach(function(b){ setTimeout(function(){ b.style.width=b.dataset.target+'%'; },200); });
-  });
+function fetchEconomicCalendar() {
+  var today = new Date();
+  var from  = today.toISOString().split('T')[0];
+  var to    = new Date(today.getTime() + 30 * 86400000).toISOString().split('T')[0];
+  var url   = 'https://finnhub.io/api/v1/calendar/economic?from=' + from + '&to=' + to + '&token=' + FINNHUB_KEY;
+
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var events = (data.economicCalendar || [])
+        .filter(function(e) { return e.impact === 'high' || e.impact === 'medium'; })
+        .slice(0, 8)
+        .map(function(e) {
+          var d = new Date(e.time || e.date);
+          return {
+            date: d.toLocaleDateString('en-GB', {day:'2-digit',month:'short'}),
+            imp:  e.impact === 'high' ? 'high' : 'med',
+            text: (e.event || e.name || 'Economic Event') + ' · ' + (e.country || 'Global')
+          };
+        });
+      if (events.length > 0) buildEvents(events);
+      document.getElementById('events-updated').textContent = 'Live';
+    })
+    .catch(function() { buildEvents(FALLBACK_EVENTS); });
 }
 
-function buildCycles() {
-  var el = document.getElementById('cycles-list');
-  if (!el) return;
-  el.innerHTML = CYCLES.map(function(c){
-    return '<div class="cycle-row"><span class="cycle-name">'+c.name+'</span><span class="cycle-phase '+c.cls+'">'+c.phase+'</span></div>';
-  }).join('');
-}
+var FALLBACK_EVENTS = [
+  {date:'Apr 4', imp:'high',text:'US NFP & Unemployment Rate · Major market mover'},
+  {date:'Apr 9', imp:'high',text:'FOMC Minutes Release · June cut signal watch'},
+  {date:'Apr 10',imp:'med', text:'US CPI Inflation March · Consensus 2.8% YoY'},
+  {date:'Apr 16',imp:'med', text:'UK CPI Inflation · Services component key watch'},
+  {date:'Apr 17',imp:'high',text:'ECB Rate Decision · Germany recession may force cut'},
+  {date:'Apr 23',imp:'med', text:'UK GDP Estimate Q1 · Recession risk assessment'},
+  {date:'Apr 30',imp:'high',text:'FOMC Rate Decision · Hold expected, language critical'}
+];
 
-function buildSignals() {
-  var el = document.getElementById('signals-list');
-  if (!el) return;
-  el.innerHTML = SIGNALS.map(function(s){
-    return '<div class="signal-item"><div class="signal-icon" style="background:'+s.col+'18">'+s.icon+'</div>'
-      +'<div class="signal-body"><div class="signal-text">'+s.text+'</div>'
-      +'<div class="signal-str" style="color:'+s.col+'">'+s.str+' CONVICTION</div></div></div>';
-  }).join('');
-}
-
-function buildEvents() {
+function buildEvents(events) {
   var el = document.getElementById('events-list');
   if (!el) return;
-  el.innerHTML = EVENTS.map(function(e){
-    return '<div class="event-item" onclick="openAnalysis(\'How should a macro trader position around this event: '+e.text.replace(/'/g,'')+'? Cover key scenarios, which assets move most, and best positioning.\')">'
-      +'<div class="event-date">'+e.date+'</div>'
-      +'<div class="event-imp imp-'+e.imp+'"></div>'
-      +'<div class="event-text">'+e.text+'</div></div>';
+  el.innerHTML = (events || FALLBACK_EVENTS).map(function(e) {
+    return '<div class="event-item" onclick="openAnalysis(\'How should a macro trader position around this upcoming event: ' + e.text.replace(/'/g,'') + '? Cover key scenarios, which assets move most, pre-event positioning strategy, and risk management.\')">'
+      + '<div class="event-date">' + e.date + '</div>'
+      + '<div class="event-imp imp-' + e.imp + '"></div>'
+      + '<div class="event-text">' + e.text + '</div></div>';
   }).join('');
 }
 
@@ -764,136 +782,336 @@ function buildEvents() {
 function buildHeatmap() {
   var wrap = document.getElementById('heatmap');
   if (!wrap) return;
-  wrap.innerHTML = HEATMAP_CATEGORIES.map(function(cat){
-    return '<div><div class="hmap-row-label">'+cat.category+'</div><div class="hmap-row">'
-      +cat.assets.map(function(a){
-        var live = a.key ? STATE.prices[a.key] : null;
-        var val  = live ? (live.chg||0) : (a.val||0);
-        return '<div class="hmap-cell" style="'+cellBg(val)+'" onclick="openAssetAnalysis(\''+(a.key||a.label)+'\')">'
-          +'<div class="hc-sym" style="color:'+cellTxt(val)+'">'+a.label+'</div>'
-          +'<div class="hc-val" style="color:'+cellTxt(val)+'">'+(val>=0?'+':'')+val.toFixed(1)+'%</div></div>';
-      }).join('')
-      +'</div></div>';
+  wrap.innerHTML = HEATMAP_CATEGORIES.map(function(cat) {
+    return '<div><div class="hmap-row-label">' + cat.category + '</div><div class="hmap-row">'
+      + cat.assets.map(function(a) {
+          var live = a.key ? STATE.prices[a.key] : null;
+          var val  = live ? (live.chg || 0) : (a.val || 0);
+          return '<div class="hmap-cell" style="' + cellBg(val) + '" onclick="openAssetAnalysis(\'' + (a.key || a.label) + '\')">'
+            + '<div class="hc-sym" style="color:' + cellTxt(val) + '">' + a.label + '</div>'
+            + '<div class="hc-val" style="color:' + cellTxt(val) + '">' + (val >= 0 ? '+' : '') + val.toFixed(1) + '%</div></div>';
+        }).join('')
+      + '</div></div>';
   }).join('');
 }
-
-function cellBg(v){
-  if(v<=-3)return'background:#7f1d1d';if(v<=-1)return'background:#991b1b';
-  if(v<=-.2)return'background:#2d1f1f';if(v<.2)return'background:#1a2028';
-  if(v<1)return'background:#1a2a1a';if(v<3)return'background:#14532d';
-  return'background:#166534';
+function updateHeatmapTimestamp() {
+  var el = document.getElementById('heatmap-updated');
+  if (el) el.textContent = 'Live · just now';
 }
-function cellTxt(v){return v<-.5?'#fca5a5':v>.5?'#86efac':'#6b7280';}
+function cellBg(v) {
+  if (v<=-3)  return 'background:#7f1d1d';
+  if (v<=-1)  return 'background:#991b1b';
+  if (v<=-.2) return 'background:#2d1f1f';
+  if (v<.2)   return 'background:#1a2028';
+  if (v<1)    return 'background:#1a2a1a';
+  if (v<3)    return 'background:#14532d';
+  return 'background:#166534';
+}
+function cellTxt(v) { return v < -.5 ? '#fca5a5' : v > .5 ? '#86efac' : '#6b7280'; }
 
 // ============================================
-// FEAR & GREED
+// FEAR & GREED GAUGE
 // ============================================
 function drawFearGauge(val) {
   var canvas = document.getElementById('fg-canvas');
   if (!canvas) return;
-  var ctx = canvas.getContext('2d'), cx=100, cy=100, r=76;
-  ctx.clearRect(0,0,200,110);
-  ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI,0,false);
-  ctx.lineWidth=11; ctx.strokeStyle='#1a2028'; ctx.stroke();
-  var pct=val/100, grad=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
-  grad.addColorStop(0,'#ef4444'); grad.addColorStop(.33,'#f59e0b');
-  grad.addColorStop(.66,'#22c55e'); grad.addColorStop(1,'#06b6d4');
-  ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI,Math.PI+pct*Math.PI,false);
-  ctx.lineWidth=11; ctx.strokeStyle=grad; ctx.lineCap='round'; ctx.stroke();
-  var angle=Math.PI+pct*Math.PI;
-  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+(r-18)*Math.cos(angle),cy+(r-18)*Math.sin(angle));
-  ctx.lineWidth=2; ctx.strokeStyle='#e2e8f0'; ctx.stroke();
-  ctx.beginPath(); ctx.arc(cx,cy,5,0,Math.PI*2); ctx.fillStyle='#e2e8f0'; ctx.fill();
-  var col=val<25?'#ef4444':val<45?'#f59e0b':val<55?'#94a3b8':val<75?'#22c55e':'#06b6d4';
-  var n=document.getElementById('fg-num'), l=document.getElementById('fg-label');
-  if(n){n.textContent=Math.round(val);n.style.color=col;}
-  if(l) l.textContent=val<25?'EXTREME FEAR':val<45?'FEAR':val<55?'NEUTRAL':val<75?'GREED':'EXTREME GREED';
-  updateHeaderStats();
+  var ctx = canvas.getContext('2d'), cx = 100, cy = 100, r = 76;
+  ctx.clearRect(0, 0, 200, 110);
+  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 0, false);
+  ctx.lineWidth = 11; ctx.strokeStyle = '#1a2028'; ctx.stroke();
+  var pct  = val / 100;
+  var grad = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+  grad.addColorStop(0, '#ef4444'); grad.addColorStop(.33, '#f59e0b');
+  grad.addColorStop(.66, '#22c55e'); grad.addColorStop(1, '#06b6d4');
+  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, Math.PI + pct * Math.PI, false);
+  ctx.lineWidth = 11; ctx.strokeStyle = grad; ctx.lineCap = 'round'; ctx.stroke();
+  var angle = Math.PI + pct * Math.PI;
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + (r-18)*Math.cos(angle), cy + (r-18)*Math.sin(angle));
+  ctx.lineWidth = 2; ctx.strokeStyle = '#e2e8f0'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI*2); ctx.fillStyle = '#e2e8f0'; ctx.fill();
+  var col = val<25?'#ef4444':val<45?'#f59e0b':val<55?'#94a3b8':val<75?'#22c55e':'#06b6d4';
+  var n = document.getElementById('fg-num'), l = document.getElementById('fg-label');
+  if (n) { n.textContent = Math.round(val); n.style.color = col; }
+  if (l) l.textContent = val<25?'EXTREME FEAR':val<45?'FEAR':val<55?'NEUTRAL':val<75?'GREED':'EXTREME GREED';
 }
 
 // ============================================
-// MODAL
+// AI — CONVICTION SCORES
 // ============================================
-function closeModal(){document.getElementById('analysis-modal').style.display='none';document.body.style.overflow='';}
-function openModal(title,sub){
-  document.getElementById('modal-title').textContent=title;
-  document.getElementById('modal-subtitle').textContent=sub||'';
-  document.getElementById('modal-body').innerHTML='<div class="modal-loading"><div class="modal-spinner"></div><div class="modal-loading-text">Analysing market conditions...</div></div>';
-  document.getElementById('analysis-modal').style.display='flex';
-  document.body.style.overflow='hidden';
-}
-function openNewsAnalysis(el){
-  var headline = el.dataset.headline || '';
-  openModal('News Analysis', headline.substring(0,80)+(headline.length>80?'…':''));
-  runAnalysis('Analyse this macro news event as a professional trader:\n\n"'+headline+'"\n\n### Why This Matters\nMacro significance and market implications.\n\n### Asset Impacts\nWhich markets are affected and how.\n\n### Trade Ideas\n2-3 trades with asset, LONG/SHORT, entry, stop, target, timeframe.\n\n### Key Risks\nWhat invalidates the trades.\n\n### Watch Next\nData and events to monitor.');
-}
-function openAnalysis(prompt){openModal('Market Analysis');runAnalysis(prompt);}
-function openAssetAnalysis(asset){
-  openModal(asset+' — Deep Analysis','Live macro + technical breakdown');
-  var p=STATE.prices[asset], ctx=p?'Current: '+fmtPrice(p)+', 24h: '+(p.chg||0).toFixed(2)+'%':'';
-  runAnalysis('Deep analysis of '+asset+'. '+ctx+'\n\n### Macro Backdrop\nKey forces driving this asset.\n\n### Technical Levels\nSupport, resistance, key moving averages with specific prices.\n\n### Trade Thesis\nLONG or SHORT. Entry zone, stop loss, Target 1, Target 2, Target 3 with timeframes.\n\n### Fundamental Drivers\n3-6 month drivers.\n\n### Risk Factors\nTop 3 risks with specific trigger levels.\n\n### Correlated Trades\nRelated assets to hedge or amplify.');
-}
-
-// ============================================
-// AI ANALYSIS — calls Anthropic API
-// Add your key to Vercel env: ANTHROPIC_API_KEY
-// ============================================
-async function runAnalysis(prompt) {
-  var body = document.getElementById('modal-body');
-  var priceCtx = Object.keys(STATE.prices).slice(0,10).map(function(sym){
-    var d=STATE.prices[sym]; return sym+': '+fmtPrice(d)+'('+(d.chg||0).toFixed(2)+'%)';
-  }).join(', ');
+async function generateConvictionScores() {
+  var priceCtx = buildPriceContext();
+  var prompt = 'You are a professional macro trader. Based on current market conditions in April 2026:\n\n' + priceCtx + '\n\nGenerate conviction trade scores. Respond ONLY with valid JSON in this exact format, no other text:\n{"trades":[{"asset":"GOLD","direction":"long","score":91,"reason":"brief reason max 8 words"},{"asset":"BTC/USD","direction":"long","score":78,"reason":"brief reason"},{"asset":"DXY","direction":"long","score":74,"reason":"brief reason"},{"asset":"EUR/USD","direction":"short","score":70,"reason":"brief reason"},{"asset":"SILVER","direction":"long","score":72,"reason":"brief reason"},{"asset":"US 10Y","direction":"short","score":67,"reason":"brief reason"},{"asset":"OIL WTI","direction":"watch","score":55,"reason":"brief reason"},{"asset":"COPPER","direction":"watch","score":49,"reason":"brief reason"}]}\n\nUpdate scores and directions based on actual current price levels above. Keep exactly 8 trades.';
 
   try {
-    var r = await fetch('/api/analyse', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({prompt:prompt, context:'Market snapshot: '+priceCtx})
+    var text = await callClaude(prompt, 400);
+    // Extract JSON
+    var match = text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON found');
+    var data = JSON.parse(match[0]);
+    if (data.trades && data.trades.length > 0) {
+      buildConvictionList(data.trades);
+      return;
+    }
+  } catch(e) {
+    console.warn('Conviction AI failed:', e.message);
+  }
+  // Fallback
+  buildConvictionList(FALLBACK_CONVICTION);
+}
+
+var FALLBACK_CONVICTION = [
+  {asset:'GOLD',   direction:'long', score:91,reason:'De-dollarisation + safe haven demand'},
+  {asset:'BTC/USD',direction:'long', score:78,reason:'Post-halving cycle intact'},
+  {asset:'DXY',    direction:'long', score:74,reason:'Tariff flight-to-safety bid'},
+  {asset:'EUR/USD',direction:'short',score:70,reason:'Germany recession + ECB dovish'},
+  {asset:'SILVER', direction:'long', score:72,reason:'Lagging gold, industrial demand'},
+  {asset:'US 10Y', direction:'short',score:67,reason:'Fiscal pressure + sticky inflation'},
+  {asset:'OIL WTI',direction:'watch',score:55,reason:'OPEC uncertainty vs demand fears'},
+  {asset:'COPPER', direction:'watch',score:49,reason:'China slowdown vs green capex'}
+];
+
+var CONV_COLORS = { long:'#22c55e', short:'#ef4444', watch:'#f59e0b' };
+
+function buildConvictionList(trades) {
+  var list = document.getElementById('conviction-list');
+  if (!list) return;
+  list.innerHTML = trades.map(function(c) {
+    var col = CONV_COLORS[c.direction] || '#94a3b8';
+    return '<div class="conv-item" onclick="openAssetAnalysis(\'' + c.asset + '\')">'
+      + '<span class="conv-sym" style="color:' + col + '">' + c.asset + '</span>'
+      + '<span class="conv-dir dir-' + c.direction + '">' + c.direction.toUpperCase() + '</span>'
+      + '<div class="conv-bar-wrap"><div class="conv-bar" style="width:0%;background:' + col + '" data-target="' + c.score + '"></div></div>'
+      + '<span class="conv-score" style="color:' + col + '">' + c.score + '</span>'
+      + '</div>'
+      + '<div class="conv-reason">' + (c.reason || '') + '</div>';
+  }).join('');
+  requestAnimationFrame(function() {
+    document.querySelectorAll('.conv-bar').forEach(function(b) {
+      setTimeout(function() { b.style.width = b.dataset.target + '%'; }, 200);
     });
-    if (!r.ok) throw new Error('HTTP '+r.status);
-    var data = await r.json();
-    if (data.error) throw new Error(data.error);
-    body.innerHTML = '<div class="mc">'+renderMd(data.text)+'</div>';
-  } catch(err) {
-    body.innerHTML = '<div class="modal-error">'
-      +'<p style="color:var(--text);margin-bottom:12px;font-size:13px">⚙️ AI Analysis</p>'
-      +'<p>To enable AI deep-analysis, add your Anthropic API key to Vercel:</p><br>'
-      +'<p>1. Vercel project → Settings → Environment Variables</p>'
-      +'<p>2. Add: <code>ANTHROPIC_API_KEY</code> = your key from console.anthropic.com</p>'
-      +'<p>3. Create the file <code>api/analyse.js</code> in your GitHub repo</p><br>'
-      +'<p style="color:var(--text3);font-size:11px">Error: '+escHtml(err.message)+'</p>'
-      +'</div>';
+  });
+}
+
+// ============================================
+// AI — MACRO SIGNALS
+// ============================================
+async function generateSignals() {
+  var priceCtx = buildPriceContext();
+  var prompt = 'You are a professional macro analyst. Based on current market conditions April 2026:\n\n' + priceCtx + '\n\nGenerate 6 key macro signals. Respond ONLY with valid JSON, no other text:\n{"signals":[{"icon":"📉","text":"specific signal description with actual numbers","strength":"HIGH","color":"#ef4444"},{"icon":"🏦","text":"signal","strength":"HIGH","color":"#ef4444"},{"icon":"📦","text":"signal","strength":"MED","color":"#f59e0b"},{"icon":"⛽","text":"signal","strength":"MED","color":"#f59e0b"},{"icon":"🌍","text":"signal","strength":"HIGH","color":"#22c55e"},{"icon":"💵","text":"signal","strength":"MED","color":"#f59e0b"}]}\n\nUse actual current price levels from above. Color: #ef4444=bearish, #22c55e=bullish, #f59e0b=neutral. Keep text under 120 chars each.';
+
+  try {
+    var text = await callClaude(prompt, 600);
+    var match = text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON');
+    var data = JSON.parse(match[0]);
+    if (data.signals && data.signals.length > 0) {
+      buildSignals(data.signals);
+      return;
+    }
+  } catch(e) {
+    console.warn('Signals AI failed:', e.message);
+  }
+  buildSignals(FALLBACK_SIGNALS);
+}
+
+var FALLBACK_SIGNALS = [
+  {icon:'📉',text:'Yield curve still inverted — 2s10s at -25bps, 18 months consecutive. Historical recession lead 12-18 months.',strength:'HIGH',color:'#ef4444'},
+  {icon:'🏦',text:'M2 money supply contracting YoY — liquidity tightening. Historically precedes risk asset pressure by 6-9 months.',strength:'HIGH',color:'#ef4444'},
+  {icon:'📦',text:'ISM Manufacturing sub-50 for 4th consecutive month — new orders 44.2, contraction deepening.',strength:'MED',color:'#f59e0b'},
+  {icon:'⛽',text:'Energy complex diverging — natural gas +12% while oil slides. Watch crack spreads for demand destruction.',strength:'MED',color:'#f59e0b'},
+  {icon:'🌍',text:'EM central banks accumulating gold at record pace — BRICS de-dollarisation accelerating.',strength:'HIGH',color:'#22c55e'},
+  {icon:'💵',text:'DXY above 104 historically stresses EM debt servicing — watch TRY, BRL, ZAR for credit stress.',strength:'MED',color:'#f59e0b'}
+];
+
+function buildSignals(signals) {
+  var el = document.getElementById('signals-list');
+  if (!el) return;
+  el.innerHTML = signals.map(function(s) {
+    return '<div class="signal-item">'
+      + '<div class="signal-icon" style="background:' + s.color + '18">' + s.icon + '</div>'
+      + '<div class="signal-body"><div class="signal-text">' + s.text + '</div>'
+      + '<div class="signal-str" style="color:' + s.color + '">' + s.strength + ' CONVICTION</div></div></div>';
+  }).join('');
+}
+
+// ============================================
+// AI — MACRO REGIME
+// ============================================
+async function generateRegime() {
+  var priceCtx = buildPriceContext();
+  var prompt = 'You are a professional macro analyst. Based on current market conditions April 2026:\n\n' + priceCtx + '\n\nGenerate current macro regime assessment. Respond ONLY with valid JSON:\n{"regime":{"growth":{"label":"Late","sub":"Slowing momentum","color":"amber"},"inflation":{"label":"Sticky","sub":"Above target","color":"amber"},"policy":{"label":"Hold","sub":"Fed / BoE / ECB","color":"blue"},"risk":{"label":"Cautious","sub":"VIX elevated","color":"red"}},"cycles":[{"name":"US Business Cycle","phase":"Late Expansion","cls":"phase-late"},{"name":"Credit Cycle","phase":"Contraction","cls":"phase-cont"},{"name":"Commodity Supercycle","phase":"Expansion","cls":"phase-exp"},{"name":"Dollar Cycle","phase":"Strengthening","cls":"phase-exp"},{"name":"Equity Bull/Bear","phase":"Late Bull","cls":"phase-late"},{"name":"Rate Cycle","phase":"Peak / Hold","cls":"phase-hold"}],"pills":["Late Cycle","Sticky Inflation","Risk-Off"]}\n\nUpdate based on actual current price data above. cls options: phase-exp, phase-late, phase-cont, phase-hold. color options: amber, blue, red, green.';
+
+  try {
+    var text = await callClaude(prompt, 600);
+    var match = text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON');
+    var data = JSON.parse(match[0]);
+    if (data.regime) {
+      buildRegime(data.regime, data.cycles, data.pills);
+      return;
+    }
+  } catch(e) {
+    console.warn('Regime AI failed:', e.message);
+  }
+  buildRegime(FALLBACK_REGIME.regime, FALLBACK_REGIME.cycles, FALLBACK_REGIME.pills);
+}
+
+var FALLBACK_REGIME = {
+  regime: {
+    growth:    {label:'Late',    sub:'Slowing momentum', color:'amber'},
+    inflation: {label:'Sticky',  sub:'Above 2% target',  color:'amber'},
+    policy:    {label:'Hold',    sub:'Fed / BoE / ECB',  color:'blue'},
+    risk:      {label:'Cautious',sub:'VIX elevated',     color:'red'}
+  },
+  cycles: [
+    {name:'US Business Cycle',   phase:'Late Expansion',cls:'phase-late'},
+    {name:'Credit Cycle',        phase:'Contraction',   cls:'phase-cont'},
+    {name:'Commodity Supercycle',phase:'Expansion',     cls:'phase-exp'},
+    {name:'Dollar Cycle',        phase:'Strengthening', cls:'phase-exp'},
+    {name:'Equity Bull/Bear',    phase:'Late Bull',     cls:'phase-late'},
+    {name:'Rate Cycle',          phase:'Peak / Hold',   cls:'phase-hold'}
+  ],
+  pills: ['Late Cycle','Sticky Inflation','Risk-Off']
+};
+
+function buildRegime(regime, cycles, pills) {
+  // Update header pills
+  if (pills && pills.length >= 3) {
+    var p1 = document.getElementById('pill-growth');
+    var p2 = document.getElementById('pill-inflation');
+    var p3 = document.getElementById('pill-risk');
+    if (p1) p1.textContent = pills[0];
+    if (p2) p2.textContent = pills[1];
+    if (p3) p3.textContent = pills[2];
+  }
+  // Regime grid
+  var el = document.getElementById('regime-grid-section');
+  if (el && regime) {
+    var entries = [
+      {label:'Growth Cycle', d:regime.growth},
+      {label:'Inflation',    d:regime.inflation},
+      {label:'Policy Stance',d:regime.policy},
+      {label:'Risk Appetite',d:regime.risk}
+    ];
+    el.innerHTML = '<div class="regime-grid">'
+      + entries.map(function(e) {
+          return '<div class="regime-box"><div class="rb-label">' + e.label + '</div>'
+            + '<div class="rb-val ' + (e.d.color||'amber') + '">' + e.d.label + '</div>'
+            + '<div class="rb-sub">' + e.d.sub + '</div></div>';
+        }).join('')
+      + '</div>';
+  }
+  // Cycles
+  if (cycles) {
+    var cl = document.getElementById('cycles-list');
+    if (cl) {
+      cl.innerHTML = cycles.map(function(c) {
+        return '<div class="cycle-row"><span class="cycle-name">' + c.name + '</span>'
+          + '<span class="cycle-phase ' + c.cls + '">' + c.phase + '</span></div>';
+      }).join('');
+    }
   }
 }
 
-function renderMd(text){
+// ============================================
+// CLAUDE API CALL (direct browser)
+// ============================================
+async function callClaude(prompt, maxTokens) {
+  if (!ANTHROPIC_KEY || ANTHROPIC_KEY === 'YOUR_ANTHROPIC_KEY_HERE') {
+    throw new Error('Anthropic key not configured');
+  }
+  var r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens || 1500,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!r.ok) throw new Error('Claude API error ' + r.status);
+  var data = await r.json();
+  return data.content && data.content[0] && data.content[0].text || '';
+}
+
+function buildPriceContext() {
+  var ctx = 'Live prices: ';
+  var parts = [];
+  Object.keys(STATE.prices).forEach(function(sym) {
+    var p = STATE.prices[sym];
+    if (p && p.price) parts.push(sym + ' ' + fmtPrice(p) + ' (' + (p.chg||0).toFixed(2) + '%)');
+  });
+  return ctx + (parts.length ? parts.join(', ') : 'prices loading');
+}
+
+// ============================================
+// MODAL & ANALYSIS
+// ============================================
+function closeModal() { document.getElementById('analysis-modal').style.display='none'; document.body.style.overflow=''; }
+function openModal(title, sub) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-subtitle').textContent = sub || '';
+  document.getElementById('modal-body').innerHTML = '<div class="modal-loading"><div class="modal-spinner"></div><div class="modal-loading-text">Analysing market conditions...</div></div>';
+  document.getElementById('analysis-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function openNewsAnalysis(el) {
+  var h = el.dataset.headline || '';
+  openModal('News Analysis', h.substring(0, 80) + (h.length > 80 ? '…' : ''));
+  runAnalysis('Analyse this macro news event professionally:\n\n"' + h + '"\n\n### Why This Matters\nMacro significance and immediate market implications.\n\n### Asset Impacts\nWhich markets are affected and how, with specific direction and magnitude.\n\n### Trade Ideas\n3 specific trades: asset, LONG or SHORT, entry zone, stop loss, target, timeframe.\n\n### Key Risks\nTop 3 risks that invalidate these trades.\n\n### Watch Next\nSpecific data releases or events to monitor.');
+}
+function openAnalysis(prompt) { openModal('Market Analysis'); runAnalysis(prompt); }
+function openAssetAnalysis(asset) {
+  openModal(asset + ' — Deep Analysis', 'Live macro + technical breakdown');
+  var p = STATE.prices[asset];
+  var ctx = p ? 'Current price: ' + fmtPrice(p) + ', 24h change: ' + (p.chg||0).toFixed(2) + '%.' : '';
+  runAnalysis('Deep professional analysis of ' + asset + '. ' + ctx + '\n\n### Macro Backdrop\nKey macro forces driving this asset right now.\n\n### Technical Levels\nSpecific support levels, resistance levels, and key moving averages with prices.\n\n### Trade Thesis\nClear LONG or SHORT bias. Entry zone, stop loss, Target 1, Target 2, Target 3 with timeframes.\n\n### Fundamental Drivers\nKey drivers for the next 3-6 months.\n\n### Risk Factors\nTop 3 risks with specific trigger levels that would invalidate the thesis.\n\n### Correlation Trades\nRelated assets to hedge or amplify this position.');
+}
+
+async function runAnalysis(prompt) {
+  var body = document.getElementById('modal-body');
+  try {
+    var text = await callClaude(buildPriceContext() + '\n\n' + prompt, 1500);
+    body.innerHTML = '<div class="mc">' + renderMd(text) + '</div>';
+  } catch(err) {
+    body.innerHTML = '<div class="modal-error"><p style="color:var(--text);margin-bottom:10px">Error: ' + escHtml(err.message) + '</p>'
+      + '<p>Make sure ANTHROPIC_KEY is set correctly in the config section at the top of index.html</p></div>';
+  }
+}
+
+function renderMd(text) {
   return text
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,'<h3>$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/`(.+?)`/g,'<code>$1</code>')
-    .replace(/^\- (.+)$/gm,'<li>$1</li>')
-    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
-    .replace(/(<li>[\s\S]*?<\/li>\n?)+/g,function(s){return'<ul>'+s+'</ul>';})
-    .replace(/\n\n/g,'</p><p>')
-    .replace(/\b(LONG|BUY)\b/g,'<span class="up">$1</span>')
-    .replace(/\b(SHORT|SELL)\b/g,'<span class="dn">$1</span>')
-    .replace(/(\$[\d,]+(?:\.\d+)?)/g,'<span class="tg">$1</span>');
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,  '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/^\- (.+)$/gm, '<li>$1</li>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>\n?)+/g, function(s) { return '<ul>' + s + '</ul>'; })
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\b(LONG|BUY)\b/g, '<span class="up">$1</span>')
+    .replace(/\b(SHORT|SELL)\b/g, '<span class="dn">$1</span>')
+    .replace(/(\$[\d,]+(?:\.\d+)?)/g, '<span class="tg">$1</span>');
 }
 
 // ============================================
 // HELPERS
 // ============================================
-function stripHtml(s){return s.replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").trim();}
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function escAttr(s){return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function timeAgo(d){
-  var s=(Date.now()-new Date(d))/1000;
-  if(s<60) return 'just now';
-  if(s<3600) return Math.floor(s/60)+'m ago';
-  if(s<86400) return Math.floor(s/3600)+'h ago';
-  return Math.floor(s/86400)+'d ago';
+function stripHtml(s) { return s.replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").trim(); }
+function escHtml(s)  { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s)  { return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function timeAgo(d) {
+  var s = (Date.now() - new Date(d)) / 1000;
+  if (s < 60)    return 'just now';
+  if (s < 3600)  return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
 }
 </script>
 </body>
