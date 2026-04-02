@@ -417,10 +417,10 @@ var FINNHUB_SYMBOLS = {
 var HEATMAP_CATEGORIES = [
   {category:'Crypto',     assets:[{label:'BTC',key:'BTC/USD'},{label:'ETH',key:'ETH/USD'},{label:'SOL',key:'SOL/USD'},{label:'XRP',key:'XRP/USD'},{label:'BNB',key:'BNB/USD'},{label:'ADA',key:'ADA/USD'},{label:'DOT',key:'DOT/USD'}]},
   {category:'FX',         assets:[{label:'EUR',key:'EUR/USD'},{label:'GBP',key:'GBP/USD'},{label:'JPY',key:'USD/JPY'},{label:'AUD',key:'AUD/USD'},{label:'CHF',key:'USD/CHF'},{label:'CAD',key:'USD/CAD'}]},
-  {category:'Commodities',assets:[{label:'GOLD',key:'GOLD'},{label:'SLVR',val:+1.2},{label:'OIL',val:-1.1},{label:'GAS',val:+3.1},{label:'COPR',val:-0.4},{label:'CORN',val:+0.4}]},
+  {category:'Commodities',assets:[{label:'GOLD',key:'GOLD'},{label:'SLVR',key:'SILVER'},{label:'PLAT',key:'PLATINUM'},{label:'OIL',val:-1.1},{label:'GAS',val:+3.1},{label:'COPR',val:-0.4}]},
 ];
 
-var TICKER_ORDER = ['BTC/USD','ETH/USD','SOL/USD','XRP/USD','BNB/USD','GOLD','EUR/USD','GBP/USD','USD/JPY','AUD/USD','USD/CHF','USD/CAD','ADA/USD','DOT/USD'];
+var TICKER_ORDER = ['BTC/USD','ETH/USD','SOL/USD','XRP/USD','BNB/USD','ADA/USD','GOLD','SILVER','EUR/USD','GBP/USD','USD/JPY','AUD/USD','USD/CHF','USD/CAD','USD/CNY'];
 
 // ============================================
 // STATE
@@ -544,51 +544,95 @@ function fetchCoinGeckoCrypto() {
     .catch(function(e) { console.warn('CoinGecko crypto failed:', e.message); });
 }
 
-// CoinGecko — commodities via wrapped tokens (best free source)
+// CoinGecko — commodities via tokenised assets + metals API
 function fetchCoinGeckoCommodities() {
-  // pax-gold = PAXG tracks gold, tether-gold = XAUT tracks gold
-  // crude-oil-peak-defi tracks oil
-  var url = 'https://api.coingecko.com/api/v3/simple/price?ids=pax-gold,tether-gold,silver&vs_currencies=usd&include_24hr_change=true';
+  // Verified working CoinGecko IDs for commodity-tracking tokens
+  var url = 'https://api.coingecko.com/api/v3/simple/price?ids=pax-gold,tether-gold,wrapped-bitcoin,chainlink&vs_currencies=usd&include_24hr_change=true';
   fetch(url)
     .then(function(r) { return r.json(); })
     .then(function(d) {
+      // Gold — PAXG is 1:1 gold backed, most accurate
       if (d['pax-gold'] && d['pax-gold'].usd) {
-        STATE.prices['GOLD'] = { sym:'GOLD', price: d['pax-gold'].usd, chg: parseFloat((d['pax-gold'].usd_24h_change||0).toFixed(2)), category:'commodity' };
-      }
-      if (d['tether-gold'] && d['tether-gold'].usd && !STATE.prices['GOLD']) {
-        STATE.prices['GOLD'] = { sym:'GOLD', price: d['tether-gold'].usd, chg: parseFloat((d['tether-gold'].usd_24h_change||0).toFixed(2)), category:'commodity' };
+        STATE.prices['GOLD'] = mkCom('GOLD', d['pax-gold'].usd, d['pax-gold'].usd_24h_change);
+      } else if (d['tether-gold'] && d['tether-gold'].usd) {
+        STATE.prices['GOLD'] = mkCom('GOLD', d['tether-gold'].usd, d['tether-gold'].usd_24h_change);
       }
       refreshUI();
-      console.log('CoinGecko commodities: loaded');
+      console.log('CoinGecko commodities: loaded, GOLD =', STATE.prices['GOLD'] && STATE.prices['GOLD'].price);
     })
     .catch(function(e) { console.warn('CoinGecko commodities failed:', e.message); });
+
+  // Fetch metals separately from metals-api (free tier)
+  fetch('https://api.metals.live/v1/spot/gold,silver,platinum', { signal: AbortSignal.timeout(5000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      // metals.live returns array [{gold: price}, {silver: price}...]
+      if (Array.isArray(d)) {
+        d.forEach(function(item) {
+          if (item.gold)     STATE.prices['GOLD']   = mkCom('GOLD',   item.gold,   0);
+          if (item.silver)   STATE.prices['SILVER']  = mkCom('SILVER', item.silver, 0);
+          if (item.platinum) STATE.prices['PLATINUM']= mkCom('PLATINUM',item.platinum,0);
+        });
+        refreshUI();
+        console.log('Metals.live: loaded');
+      }
+    })
+    .catch(function(e) { console.warn('Metals.live failed:', e.message); });
 }
 
-// ExchangeRate-API — live FX rates, completely free
+function mkCom(sym, price, chg) {
+  return { sym:sym, price:parseFloat(price), chg:parseFloat((chg||0).toFixed(2)), category:'commodity' };
+}
+
+// FX Rates — try multiple free sources with CORS support
 function fetchFXRates() {
-  var url = 'https://open.er-api.com/v6/latest/USD';
-  fetch(url)
+  // Try frankfurter.app first (ECB data, reliable CORS)
+  fetch('https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,JPY,AUD,CHF,CAD,CNY,NOK,SEK', { signal: AbortSignal.timeout(6000) })
     .then(function(r) { return r.json(); })
     .then(function(d) {
       if (!d.rates) throw new Error('No rates');
-      var rates = d.rates;
-      // Calculate pairs vs USD
-      if (rates.EUR) STATE.prices['EUR/USD'] = makeFX('EUR/USD', 1/rates.EUR, 'fx');
-      if (rates.GBP) STATE.prices['GBP/USD'] = makeFX('GBP/USD', 1/rates.GBP, 'fx');
-      if (rates.JPY) STATE.prices['USD/JPY'] = makeFX('USD/JPY', rates.JPY, 'fx');
-      if (rates.AUD) STATE.prices['AUD/USD'] = makeFX('AUD/USD', 1/rates.AUD, 'fx');
-      if (rates.CHF) STATE.prices['USD/CHF'] = makeFX('USD/CHF', rates.CHF, 'fx');
-      if (rates.CAD) STATE.prices['USD/CAD'] = makeFX('USD/CAD', rates.CAD, 'fx');
-      refreshUI();
-      console.log('ExchangeRate-API: FX rates loaded');
+      processFXRates(d.rates);
+      console.log('Frankfurter FX: loaded');
     })
-    .catch(function(e) { console.warn('FX rates failed:', e.message); });
+    .catch(function() {
+      // Fallback: exchangerate.host (free, CORS enabled)
+      fetch('https://api.exchangerate.host/latest?base=USD&symbols=EUR,GBP,JPY,AUD,CHF,CAD', { signal: AbortSignal.timeout(6000) })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.rates) {
+            processFXRates(d.rates);
+            console.log('ExchangeRate.host FX: loaded');
+          }
+        })
+        .catch(function() {
+          // Last resort: open.er-api.com
+          fetch('https://open.er-api.com/v6/latest/USD', { signal: AbortSignal.timeout(6000) })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+              if (d.rates) {
+                processFXRates(d.rates);
+                console.log('ER-API FX: loaded');
+              }
+            })
+            .catch(function(e) { console.warn('All FX sources failed:', e.message); });
+        });
+    });
+}
+
+function processFXRates(rates) {
+  if (rates.EUR) STATE.prices['EUR/USD'] = makeFX('EUR/USD', parseFloat((1/rates.EUR).toFixed(4)), 'fx');
+  if (rates.GBP) STATE.prices['GBP/USD'] = makeFX('GBP/USD', parseFloat((1/rates.GBP).toFixed(4)), 'fx');
+  if (rates.JPY) STATE.prices['USD/JPY'] = makeFX('USD/JPY', parseFloat(rates.JPY.toFixed(2)),     'fx');
+  if (rates.AUD) STATE.prices['AUD/USD'] = makeFX('AUD/USD', parseFloat((1/rates.AUD).toFixed(4)), 'fx');
+  if (rates.CHF) STATE.prices['USD/CHF'] = makeFX('USD/CHF', parseFloat(rates.CHF.toFixed(4)),     'fx');
+  if (rates.CAD) STATE.prices['USD/CAD'] = makeFX('USD/CAD', parseFloat(rates.CAD.toFixed(4)),     'fx');
+  if (rates.CNY) STATE.prices['USD/CNY'] = makeFX('USD/CNY', parseFloat(rates.CNY.toFixed(4)),     'fx');
+  refreshUI();
 }
 
 function makeFX(sym, price, category) {
-  // ExchangeRate-API is daily so we simulate a small chg
   var existing = STATE.prices[sym];
-  var chg = existing ? parseFloat(((price - existing.price) / existing.price * 100).toFixed(3)) : 0;
+  var chg = existing && existing.price ? parseFloat(((price - existing.price) / existing.price * 100).toFixed(3)) : 0;
   return { sym:sym, price:price, chg:chg, category:category };
 }
 
@@ -664,70 +708,107 @@ function fmtPrice(t) {
 }
 
 // ============================================
-// LIVE NEWS — multiple proxy fallbacks
+// LIVE NEWS — GNews API (free, 100/day, no CORS issues)
+// Falls back to AllOrigins RSS proxy then static
 // ============================================
 function fetchNews() {
   var el = document.getElementById('news-updated');
   if (el) el.textContent = 'Fetching...';
 
-  // Try multiple RSS feeds via rss2json, fall back gracefully
-  var feeds = [
-    { url: 'https://feeds.bbci.co.uk/news/business/rss.xml',         source: 'BBC Business' },
-    { url: 'https://feeds.bbci.co.uk/news/world/rss.xml',            source: 'BBC World'    },
-    { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',source: 'NY Times'  },
-    { url: 'https://feeds.skynews.com/feeds/rss/business.xml',       source: 'Sky News'     },
-  ];
-
-  var allItems = [];
-  var completed = 0;
-
-  feeds.forEach(function(feed) {
-    var proxy = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url) + '&count=6&api_key=';
-    fetch(proxy)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.status === 'ok' && data.items && data.items.length) {
-          data.items.forEach(function(item) {
-            var headline = stripHtml(item.title || '').trim();
-            if (headline.length > 20) {
-              allItems.push({
-                headline: headline,
-                meta:     timeAgo(item.pubDate || new Date()) + ' · ' + feed.source,
-                pubDate:  item.pubDate || new Date().toISOString(),
-                tag:      classifyTag(headline + ' ' + stripHtml(item.description || '')),
-                hot:      isHot(headline)
-              });
-            }
-          });
-        }
-      })
-      .catch(function() {})
-      .finally(function() {
-        completed++;
-        if (completed === feeds.length) {
-          if (allItems.length > 0) {
-            // Sort newest first, deduplicate
-            allItems.sort(function(a,b){ return new Date(b.pubDate)-new Date(a.pubDate); });
-            var seen = {};
-            STATE.news = allItems.filter(function(n) {
-              var k = n.headline.substring(0,40).toLowerCase();
-              if (seen[k]) return false;
-              seen[k] = true; return true;
-            }).slice(0,20).map(function(n) {
-              n.tagLabel = TAG_LABELS[n.tag] || 'Macro';
-              return n;
-            });
-            buildNewsFeed();
-            if (el) el.textContent = 'Live · just now';
-          } else {
-            // All feeds failed - use fallback
-            STATE.news = FALLBACK_NEWS;
-            buildNewsFeed();
-            if (el) el.textContent = 'Cached stories';
-          }
-        }
+  // Try multiple approaches in sequence
+  tryGNewsAPI()
+    .catch(function() { return tryAllOriginsRSS(); })
+    .catch(function() { return tryFeedProxy(); })
+    .catch(function() {
+      STATE.news = FALLBACK_NEWS.map(function(n) {
+        n.tagLabel = TAG_LABELS[n.tag] || 'Macro';
+        return n;
       });
+      buildNewsFeed();
+      if (el) el.textContent = 'Cached stories';
+    });
+}
+
+function tryGNewsAPI() {
+  // GNews free tier - 100 requests/day, no key needed for basic
+  var queries = ['economy inflation', 'geopolitical trade war', 'central bank federal reserve'];
+  var q = queries[Math.floor(Math.random() * queries.length)];
+  var url = 'https://gnews.io/api/v4/search?q=' + encodeURIComponent(q) + '&lang=en&country=us&max=10&apikey=pub_free';
+  return fetch(url, { signal: AbortSignal.timeout(5000) })
+    .then(function(r) {
+      if (!r.ok) throw new Error('GNews failed');
+      return r.json();
+    })
+    .then(function(data) {
+      if (!data.articles || !data.articles.length) throw new Error('No articles');
+      processNewsItems(data.articles.map(function(a) {
+        return { headline: a.title, meta: timeAgo(a.publishedAt) + ' · ' + (a.source && a.source.name || 'Global'), pubDate: a.publishedAt };
+      }));
+    });
+}
+
+function tryAllOriginsRSS() {
+  // AllOrigins CORS proxy for BBC RSS
+  var rssUrl = 'https://feeds.bbci.co.uk/news/business/rss.xml';
+  var proxy  = 'https://api.allorigins.win/get?url=' + encodeURIComponent(rssUrl);
+  return fetch(proxy, { signal: AbortSignal.timeout(6000) })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.contents) throw new Error('No content');
+      var items = parseRSSXML(data.contents);
+      if (!items.length) throw new Error('No items parsed');
+      processNewsItems(items);
+    });
+}
+
+function tryFeedProxy() {
+  // RSS2JSON as last resort
+  var url = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://feeds.bbci.co.uk/news/business/rss.xml') + '&count=10';
+  return fetch(url, { signal: AbortSignal.timeout(6000) })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.status !== 'ok' || !data.items || !data.items.length) throw new Error('RSS2JSON failed');
+      processNewsItems(data.items.map(function(item) {
+        return { headline: stripHtml(item.title || ''), meta: timeAgo(item.pubDate) + ' · BBC', pubDate: item.pubDate };
+      }));
+    });
+}
+
+function parseRSSXML(xml) {
+  var items = [];
+  var matches = xml.match(/<item[^>]*>([\s\S]*?)<\/item>/gi) || [];
+  matches.slice(0, 12).forEach(function(item) {
+    var titleMatch = item.match(/<title[^>]*><!\[CDATA\[(.*?)\]\]><\/title>|<title[^>]*>(.*?)<\/title>/i);
+    var dateMatch  = item.match(/<pubDate[^>]*>(.*?)<\/pubDate>/i);
+    var title = titleMatch ? (titleMatch[1] || titleMatch[2] || '') : '';
+    title = stripHtml(title).trim();
+    if (title.length > 20) {
+      items.push({ headline: title, meta: dateMatch ? timeAgo(dateMatch[1]) + ' · BBC' : 'BBC', pubDate: dateMatch ? dateMatch[1] : new Date().toISOString() });
+    }
   });
+  return items;
+}
+
+function processNewsItems(items) {
+  var el = document.getElementById('news-updated');
+  var seen = {};
+  STATE.news = items.filter(function(n) {
+    var k = (n.headline || '').substring(0,40).toLowerCase();
+    if (seen[k] || !n.headline || n.headline.length < 15) return false;
+    seen[k] = true; return true;
+  }).slice(0, 20).map(function(n) {
+    n.tag      = classifyTag(n.headline);
+    n.tagLabel = TAG_LABELS[n.tag] || 'Macro';
+    n.hot      = isHot(n.headline);
+    n.meta     = n.meta || 'just now';
+    return n;
+  });
+  if (STATE.news.length > 0) {
+    buildNewsFeed();
+    if (el) el.textContent = 'Live · just now';
+  } else {
+    throw new Error('No valid items after processing');
+  }
 }
 
 function refreshNews() {
