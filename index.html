@@ -753,11 +753,20 @@ function buildSignals(sigs){
 }
 
 function buildEvents(){
-  var el=document.getElementById('evl');if(!el)return;
-  el.innerHTML=EVENTS.map(function(e){
-    return'<div class="evi" onclick="openA(\'How should a macro trader position around this upcoming event: '+e.t.replace(/\'/g,'')+\'? Cover key scenarios, which assets move most, and best pre-event strategy.\')">'
-      +'<div class="evd">'+e.d+'</div><div class="evim '+e.i+'"></div><div class="evt">'+e.t+'</div></div>';
-  }).join('');
+  var el=document.getElementById('evl');
+  if(!el)return;
+  var html='';
+  EVENTS.forEach(function(e){
+    html+='<div class="evi evclick"><div class="evd">'+e.d+'</div><div class="evim '+e.i+'"></div><div class="evt">'+e.t+'</div></div>';
+  });
+  el.innerHTML=html;
+  var divs=el.querySelectorAll('.evclick');
+  divs.forEach(function(div,idx){
+    div.addEventListener('click',function(){
+      var ev=EVENTS[idx];
+      openA('How should a macro trader position around this upcoming event: '+ev.t.replace(/['"]/g,'')+' ? Cover: key scenarios, which assets move most, pre-event positioning, and risk management strategy.');
+    });
+  });
 }
 
 // ============================================
